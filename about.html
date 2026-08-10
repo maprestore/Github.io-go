@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | LogiSwift Global Freight</title>
+    <meta name="description" content="Learn about LogiSwift — our story, mission, team, and the values that drive elite global freight forwarding across 60+ countries.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        html { scroll-behavior: smooth; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .bg-noise { background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0); background-size: 24px 24px; }
+        .timeline-line::before { content:''; position:absolute; left:20px; top:44px; bottom:-20px; width:2px; background: linear-gradient(to bottom, #3b82f6, transparent); }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation: fadeUp 0.6s ease forwards; }
+        .value-card:hover { transform: translateY(-4px); }
+        .value-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-300 antialiased">
+
+    <!-- NAV -->
+    <nav class="bg-[#0b0f19]/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3.5">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-compass text-white text-base"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-white leading-none">LogiSwift</span>
+                    <span class="text-[9px] text-slate-500 tracking-widest uppercase mt-1 font-semibold">Global Transits</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-slate-400">
+                <a href="index.html" class="hover:text-white transition-colors">Home</a>
+                <a href="index.html#services" class="hover:text-white transition-colors">Services</a>
+                <a href="tracking.html" class="hover:text-white transition-colors">Track Shipment</a>
+                <a href="about.html" class="text-blue-400">About Us</a>
+                <a href="index.html#contact" class="hover:text-white transition-colors">Contact</a>
+            </div>
+            <a href="index.html#contact" class="text-xs font-bold uppercase tracking-wider bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 rounded-xl transition-all duration-300">Get a Quote</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative py-24 sm:py-36 px-4 overflow-hidden bg-noise border-b border-slate-900/60">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/8 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10 fade-up">
+            <div class="inline-flex items-center space-x-2 bg-blue-500/5 text-blue-400 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-blue-500/10 mb-6">
+                <i class="fa-solid fa-compass text-blue-500"></i>
+                <span>Our Story</span>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 leading-tight">
+                Moving the world's cargo<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">with precision and trust.</span>
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto text-base leading-relaxed">
+                Since 2018, LogiSwift has been the freight partner of choice for enterprises demanding speed, reliability, and complete supply chain visibility.
+            </p>
+        </div>
+    </header>
+
+    <!-- KEY NUMBERS -->
+    <section class="bg-[#080c14] border-b border-slate-900 py-14 px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div><div class="text-3xl font-black text-white">2018</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Founded</div></div>
+            <div><div class="text-3xl font-black text-blue-400">60+</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Countries Served</div></div>
+            <div><div class="text-3xl font-black text-emerald-400">98.7%</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">On-Time Delivery</div></div>
+            <div><div class="text-3xl font-black text-amber-400">500+</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Carrier Partners</div></div>
+        </div>
+    </section>
+
+    <!-- OUR STORY TIMELINE -->
+    <section class="max-w-4xl mx-auto py-20 px-4 sm:px-8">
+        <div class="text-center mb-16">
+            <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Our Journey</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">How We Got Here</h2>
+        </div>
+        <div class="space-y-10" id="timeline"></div>
+    </section>
+
+    <!-- MISSION / VISION / VALUES -->
+    <section class="bg-[#080b12] border-t border-b border-slate-900 py-20 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">What We Stand For</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Mission, Vision & Values</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center">
+                    <div class="w-12 h-12 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center mx-auto mb-5"><i class="fa-solid fa-bullseye text-lg"></i></div>
+                    <h3 class="text-white font-black text-sm uppercase tracking-wider mb-3">Our Mission</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">To simplify global trade by providing enterprises with the most transparent, reliable, and technology-driven freight solutions available — anywhere on earth.</p>
+                </div>
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center">
+                    <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center mx-auto mb-5"><i class="fa-solid fa-eye text-lg"></i></div>
+                    <h3 class="text-white font-black text-sm uppercase tracking-wider mb-3">Our Vision</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">A world where every business, regardless of size, has access to enterprise-grade logistics infrastructure — frictionlessly connected across every border.</p>
+                </div>
+                <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center">
+                    <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center mx-auto mb-5"><i class="fa-solid fa-handshake text-lg"></i></div>
+                    <h3 class="text-white font-black text-sm uppercase tracking-wider mb-3">Our Promise</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">No hidden fees, no excuses. Every shipment is tracked, every milestone communicated, every delivery confirmed — or we make it right.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="values-grid"></div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="max-w-6xl mx-auto py-20 px-4 sm:px-8">
+        <div class="text-center mb-14">
+            <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">The People</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">Leadership Team</h2>
+            <p class="text-slate-500 text-xs mt-3 max-w-lg mx-auto">Logistics veterans and technology experts united by a singular obsession: getting your cargo there on time.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="team-grid"></div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="bg-[#080b12] border-t border-slate-900 py-16 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Compliance & Trust</span>
+                <h2 class="text-2xl font-black text-white">Certifications & Standards</h2>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5" id="cert-grid"></div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-20 px-4 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-indigo-600/10 to-purple-600/5 pointer-events-none"></div>
+        <div class="max-w-2xl mx-auto relative z-10">
+            <h2 class="text-3xl font-black text-white mb-4">Ready to ship globally?</h2>
+            <p class="text-slate-400 text-sm mb-8">Join 2,000+ enterprises who trust LogiSwift with their supply chains.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="index.html#contact" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-10 py-4 rounded-xl transition active:scale-95 shadow-lg shadow-blue-600/20">Get a Quote</a>
+                <a href="tracking.html" class="bg-slate-900 border border-slate-800 hover:border-slate-700 text-white font-bold text-xs uppercase tracking-widest px-10 py-4 rounded-xl transition">Track a Shipment</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#070a11] border-t border-slate-900/40 py-12 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-600">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-7 h-7 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-compass text-white text-xs"></i></div>
+                <span class="text-slate-500 font-bold text-xs">LogiSwift Systems</span>
+            </div>
+            <p>&copy; 2026 LogiSwift Systems Collective. All rights reserved.</p>
+            <div class="flex space-x-4 text-slate-700">
+                <a href="index.html" class="hover:text-slate-400 transition">Home</a>
+                <a href="tracking.html" class="hover:text-slate-400 transition">Track</a>
+                <a href="index.html#contact" class="hover:text-slate-400 transition">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+<script>
+    // Timeline data
+    const timeline = [
+        { year: "2018", title: "Founded in London", desc: "LogiSwift was born in a Canary Wharf co-working space with a simple idea: freight forwarding should be as easy as booking a flight. Three co-founders, one whiteboard, and a shared conviction that the industry was broken." },
+        { year: "2019", title: "First 100 Enterprise Clients", desc: "Within 12 months, LogiSwift had signed its first 100 enterprise clients across the UK and Europe. Our proprietary customs pre-clearance automation cut clearance times by an average of 40%." },
+        { year: "2020", title: "Expansion to 30 Countries", desc: "Despite global disruptions, LogiSwift expanded to 30 countries, launched an emergency air freight corridor, and grew 300% — proving that transparent, technology-first logistics thrives in crisis." },
+        { year: "2022", title: "Ocean Freight & Cold Chain Launch", desc: "We introduced full FCL/LCL ocean freight capabilities and launched our specialist cold chain division for pharmaceutical and perishable cargo — now serving 15 major biotech firms." },
+        { year: "2024", title: "60+ Countries, 500+ Carriers", desc: "LogiSwift reached 60+ countries with a carrier network exceeding 500 partners. Our real-time tracking infrastructure now handles over 10,000 active shipments simultaneously." },
+        { year: "2026", title: "AI-Powered Route Optimization", desc: "We launched our Autonomous Route Optimization Engine — an AI-driven system that dynamically selects the fastest, most cost-effective routing across our entire carrier network in real time." },
+    ];
+
+    const tl = document.getElementById('timeline');
+    timeline.forEach((item, i) => {
+        tl.innerHTML += `
+            <div class="relative flex gap-6 timeline-line ${i < timeline.length - 1 ? 'pb-2' : ''}">
+                <div class="flex-shrink-0 w-10 h-10 bg-blue-600/10 border border-blue-500/30 rounded-xl flex items-center justify-center mt-1">
+                    <span class="text-[9px] font-black text-blue-400 font-mono">${item.year.slice(2)}</span>
+                </div>
+                <div class="flex-1 bg-slate-950/40 border border-slate-800/50 rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-[10px] font-mono font-bold text-blue-500 uppercase tracking-widest">${item.year}</span>
+                    </div>
+                    <h4 class="text-white font-bold text-sm mb-2">${item.title}</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">${item.desc}</p>
+                </div>
+            </div>`;
+    });
+
+    // Values
+    const values = [
+        { icon: "fa-eye", color: "blue", title: "Transparency", desc: "Every shipment, every fee, every delay — communicated proactively. No surprises, ever." },
+        { icon: "fa-bolt", color: "amber", title: "Speed", desc: "We optimize for velocity. Your cargo moves through our network on the fastest available route." },
+        { icon: "fa-shield-halved", color: "emerald", title: "Reliability", desc: "98.7% on-time delivery. When we commit to a timeline, we honour it." },
+        { icon: "fa-microchip", color: "purple", title: "Innovation", desc: "We reinvest heavily in technology. Our tools give you capabilities once reserved for the Fortune 500." },
+    ];
+
+    const colorsV = { blue:'bg-blue-500/10 text-blue-400 border-blue-500/20', amber:'bg-amber-500/10 text-amber-400 border-amber-500/20', emerald:'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', purple:'bg-purple-500/10 text-purple-400 border-purple-500/20' };
+    const vg = document.getElementById('values-grid');
+    values.forEach(v => {
+        vg.innerHTML += `
+            <div class="value-card bg-slate-950/60 border border-slate-800/50 rounded-xl p-6 text-center">
+                <div class="w-10 h-10 ${colorsV[v.color]} border rounded-xl flex items-center justify-center mx-auto mb-4"><i class="fa-solid ${v.icon}"></i></div>
+                <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-2">${v.title}</h4>
+                <p class="text-slate-500 text-xs leading-relaxed">${v.desc}</p>
+            </div>`;
+    });
+
+    // Team
+    const team = [
+        { name: "James Okwu", role: "Co-Founder & CEO", bio: "20 years in global freight. Former VP at Maersk Logistics.", icon: "fa-user-tie", color: "blue" },
+        { name: "Dr. Priya Anand", role: "Co-Founder & CTO", bio: "MIT AI Lab alumni. Architect of our route optimization engine.", icon: "fa-microchip", color: "purple" },
+        { name: "Sofia Reyes", role: "Chief Operations Officer", bio: "Ex-DHL Global. Oversees our 60-country carrier network.", icon: "fa-diagram-project", color: "emerald" },
+        { name: "Marcus Venn", role: "Head of Compliance", bio: "Customs law specialist. Former HMRC senior adviser.", icon: "fa-scale-balanced", color: "amber" },
+    ];
+
+    const colT = { blue:'bg-blue-500/10 text-blue-400 border-blue-500/10', purple:'bg-purple-500/10 text-purple-400 border-purple-500/10', emerald:'bg-emerald-500/10 text-emerald-400 border-emerald-500/10', amber:'bg-amber-500/10 text-amber-400 border-amber-500/10' };
+    const tg = document.getElementById('team-grid');
+    team.forEach(m => {
+        tg.innerHTML += `
+            <div class="bg-slate-950/40 border border-slate-800/50 rounded-2xl p-6 text-center hover:border-slate-700 transition-all duration-300">
+                <div class="w-16 h-16 ${colT[m.color]} border rounded-2xl flex items-center justify-center mx-auto mb-5"><i class="fa-solid ${m.icon} text-xl"></i></div>
+                <h4 class="text-white font-bold text-sm">${m.name}</h4>
+                <span class="text-[10px] font-mono text-blue-400 uppercase tracking-wider block mt-1">${m.role}</span>
+                <p class="text-slate-500 text-xs mt-3 leading-relaxed">${m.bio}</p>
+            </div>`;
+    });
+
+    // Certs
+    const certs = [
+        { icon: "fa-certificate", title: "ISO 9001:2015", desc: "Quality Management System certified across all operational divisions.", color: "blue" },
+        { icon: "fa-shield-halved", title: "AEO Authorised", desc: "Authorised Economic Operator status — trusted trader certification by customs authorities.", color: "emerald" },
+        { icon: "fa-plane-departure", title: "IATA Accredited", desc: "International Air Transport Association accreditation for safe air cargo handling.", color: "purple" },
+        { icon: "fa-anchor", title: "FIATA Member", desc: "Full member of the International Federation of Freight Forwarders Associations.", color: "amber" },
+        { icon: "fa-lock", title: "GDPR Compliant", desc: "All cargo and client data processed under full GDPR compliance frameworks.", color: "blue" },
+        { icon: "fa-file-contract", title: "Licensed Customs Broker", desc: "Licensed in the UK, EU, UAE, and Singapore for direct customs representation.", color: "emerald" },
+    ];
+    const colC = { blue:'bg-blue-500/10 text-blue-400 border-blue-500/20', emerald:'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', purple:'bg-purple-500/10 text-purple-400 border-purple-500/20', amber:'bg-amber-500/10 text-amber-400 border-amber-500/20' };
+    const cg = document.getElementById('cert-grid');
+    certs.forEach(c => {
+        cg.innerHTML += `
+            <div class="bg-slate-950 border border-slate-800/60 rounded-xl p-5 flex items-start gap-4 hover:border-slate-700 transition">
+                <div class="w-10 h-10 ${colC[c.color]} border rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa-solid ${c.icon} text-sm"></i></div>
+                <div>
+                    <h4 class="text-white font-bold text-xs uppercase tracking-wider">${c.title}</h4>
+                    <p class="text-slate-500 text-xs mt-1 leading-relaxed">${c.desc}</p>
+                </div>
+            </div>`;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiSwift | Elite Global Freight Forwarding</title>
+    <meta name="description" content="LogiSwift — real-time shipment tracking, instant freight quotes, and enterprise-grade global logistics across 60+ countries.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        html { scroll-behavior: smooth; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .bg-noise { background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0); background-size: 24px 24px; }
+        .glow-effect { box-shadow: 0 0 40px -10px rgba(37,99,235,0.15); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+        .faq-answer.open { max-height: 400px; }
+        .calc-input { background:#0e1422; border:1px solid #1e293b; border-radius:0.75rem; padding:0.75rem 1rem; color:#fff; outline:none; width:100%; font-size:0.8rem; transition:border-color 0.2s; font-family:inherit; }
+        .calc-input:focus { border-color:rgba(59,130,246,0.5); }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation: fadeUp 0.5s ease forwards; }
+        @keyframes ticker { 0%{transform:translateX(0)}100%{transform:translateX(-50%)} }
+        .ticker-inner { animation: ticker 30s linear infinite; display:flex; width:max-content; }
+        .ticker-inner:hover { animation-play-state: paused; }
+        .nav-link { position:relative; }
+        .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#3b82f6; transition:width 0.2s; }
+        .nav-link:hover::after { width:100%; }
+        #cookie-banner { transition: transform 0.4s ease; }
+        .pricing-card:hover { transform: translateY(-6px); }
+        .pricing-card { transition: transform 0.3s ease; }
+        #back-to-top { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-300 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- COOKIE CONSENT BANNER -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 z-50 bg-[#0b0f19]/98 border-t border-slate-800 p-4 sm:p-5">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-start gap-3">
+                <i class="fa-solid fa-cookie-bite text-amber-400 text-lg mt-0.5 flex-shrink-0"></i>
+                <p class="text-xs text-slate-400 leading-relaxed">We use cookies to improve your experience, analyze site traffic, and personalize content. By continuing to use LogiSwift, you agree to our <a href="#" class="text-blue-400 underline hover:text-blue-300">Cookie Policy</a> and <a href="#" class="text-blue-400 underline hover:text-blue-300">Privacy Policy</a>.</p>
+            </div>
+            <div class="flex gap-3 flex-shrink-0">
+                <button onclick="acceptCookies('essential')" class="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-900 border border-slate-800 hover:bg-slate-800 px-4 py-2.5 rounded-xl transition">Essential Only</button>
+                <button onclick="acceptCookies('all')" class="text-[10px] font-bold uppercase tracking-wider text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl transition">Accept All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP -->
+    <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-24 right-5 z-40 w-11 h-11 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20 flex items-center justify-center opacity-0 pointer-events-none" aria-label="Back to top">
+        <i class="fa-solid fa-chevron-up text-sm"></i>
+    </button>
+
+    <!-- NAV -->
+    <nav class="bg-[#0b0f19]/90 backdrop-blur-xl sticky top-0 z-40 border-b border-slate-800/50" id="main-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3.5">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-compass text-white text-base"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-white leading-none">LogiSwift</span>
+                    <span class="text-[9px] text-slate-500 tracking-widest uppercase mt-1 font-semibold">Global Transits</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-slate-400">
+                <a href="#services" class="nav-link hover:text-white transition-colors py-1">Services</a>
+                <a href="tracking.html" class="nav-link hover:text-white transition-colors py-1">Track Shipment</a>
+                <a href="#calculator" class="nav-link hover:text-white transition-colors py-1">Rate Calc</a>
+                <a href="#pricing" class="nav-link hover:text-white transition-colors py-1">Pricing</a>
+                <a href="about.html" class="nav-link hover:text-white transition-colors py-1">About Us</a>
+                <a href="#contact" class="nav-link hover:text-white transition-colors py-1">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="tracking.html" class="hidden sm:inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-satellite-dish text-blue-500"></i>Track
+                </a>
+                <a href="#contact" class="text-xs font-bold uppercase tracking-wider bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/10">Get a Quote</a>
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-11 h-11 flex items-center justify-center border border-slate-800 rounded-xl hover:bg-slate-900 transition" aria-label="Toggle Menu">
+                    <i id="menu-icon" class="fa-solid fa-bars-staggered text-slate-400 text-lg"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-800 bg-[#0b0f19] px-6 py-5 space-y-2 shadow-2xl">
+            <a href="#services" onclick="toggleMobileMenu()" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-circle-nodes mr-3 text-blue-500"></i>Services</a>
+            <a href="tracking.html" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-satellite-dish mr-3 text-blue-500"></i>Track Shipment</a>
+            <a href="#calculator" onclick="toggleMobileMenu()" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-calculator mr-3 text-blue-500"></i>Rate Calculator</a>
+            <a href="#pricing" onclick="toggleMobileMenu()" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-tag mr-3 text-blue-500"></i>Pricing</a>
+            <a href="about.html" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-users mr-3 text-blue-500"></i>About Us</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block py-3 px-4 rounded-xl text-slate-300 font-medium text-sm hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"><i class="fa-solid fa-envelope mr-3 text-blue-500"></i>Contact</a>
+        </div>
+    </nav>
+
+    <!-- ── HERO ────────────────────────────────────────────────── -->
+    <header id="hero" class="relative py-20 sm:py-36 px-4 sm:px-6 overflow-hidden bg-noise border-b border-slate-900/60">
+        <div class="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/8 blur-[130px] rounded-full pointer-events-none"></div>
+        <div class="absolute top-1/2 right-1/4 w-[300px] h-[300px] bg-indigo-600/6 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center space-x-2 bg-blue-500/5 text-blue-400 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-blue-500/10 mb-7">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                <span>AI Route Optimization Engine — Active</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight text-white mb-6 leading-[1.1] max-w-4xl mx-auto">
+                Global supply chains,<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">simplified beautifully.</span>
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto mb-10 text-sm sm:text-base md:text-lg font-normal leading-relaxed">
+                Track enterprise shipments in real-time, get instant freight quotes, and coordinate global carrier networks — all from one platform.
+            </p>
+
+            <!-- QUICK TRACK -->
+            <div class="max-w-2xl mx-auto mb-5">
+                <div class="flex items-center justify-between px-1 mb-2">
+                    <label for="track-input" class="text-[10px] font-bold uppercase tracking-widest text-slate-500">Live Package Lookup</label>
+                    <span class="text-[10px] font-mono text-slate-600 hidden sm:flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Real-time manifest data</span>
+                </div>
+                <div class="bg-slate-950/60 backdrop-blur-md p-3 rounded-2xl border border-slate-800/80 shadow-2xl glow-effect">
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <div class="flex-1 flex items-center px-4 bg-[#0e1422] rounded-xl border border-slate-800/60 focus-within:border-blue-500/50 transition-all duration-300">
+                            <i class="fa-solid fa-fingerprint text-slate-600 mr-3 text-base"></i>
+                            <input type="text" id="track-input" placeholder="Enter tracking ID (e.g., LS-1001)..." aria-label="Tracking ID" class="w-full py-4 bg-transparent outline-none text-xs font-mono font-medium tracking-widest text-white placeholder:text-slate-600" onkeypress="if(event.key==='Enter')quickTrack()">
+                        </div>
+                        <button onclick="quickTrack()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl transition shadow-lg shadow-blue-600/10 active:scale-95 duration-150 flex items-center justify-center gap-2"><i class="fa-solid fa-magnifying-glass text-[11px]"></i>Track Now</button>
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-600 mt-2 px-1">Format: two-letter carrier prefix + shipment number, e.g. <button onclick="document.getElementById('track-input').value='LS-1001';quickTrack()" class="font-mono text-slate-500 hover:text-blue-400 underline underline-offset-2 transition">LS-1001</button></p>
+            </div>
+            <div id="hero-track-result" class="hidden max-w-2xl mx-auto text-left mb-5"></div>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs text-slate-500">
+                <a href="tracking.html" class="flex items-center gap-2 hover:text-blue-400 transition"><i class="fa-solid fa-layer-group text-blue-500/60"></i>Track multiple shipments</a>
+                <span class="hidden sm:block text-slate-800">|</span>
+                <a href="tracking.html" class="flex items-center gap-2 hover:text-blue-400 transition"><i class="fa-solid fa-magnifying-glass text-blue-500/60"></i>Search by company name</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── LIVE STATS ──────────────────────────────────────────── -->
+    <section class="bg-[#080c14] border-b border-slate-900 py-12 px-4">
+        <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div><div class="text-2xl sm:text-3xl font-black text-white" id="stat-total">—</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Shipments Processed</div></div>
+            <div><div class="text-2xl sm:text-3xl font-black text-blue-400" id="stat-transit">—</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Currently In Transit</div></div>
+            <div><div class="text-2xl sm:text-3xl font-black text-emerald-400" id="stat-delivered">—</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Delivered</div></div>
+            <div><div class="text-2xl sm:text-3xl font-black text-amber-400" id="stat-weight">—</div><div class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Total KG Handled</div></div>
+        </div>
+    </section>
+
+    <!-- ── CARRIER TICKER ──────────────────────────────────────── -->
+    <section class="bg-slate-950 border-b border-slate-900/60 py-5 overflow-hidden">
+        <div class="ticker-inner text-[10px] font-mono font-bold tracking-widest text-slate-600 uppercase select-none" id="ticker"></div>
+    </section>
+
+    <!-- ── SERVICES ────────────────────────────────────────────── -->
+    <section id="services" class="max-w-7xl mx-auto py-16 sm:py-24 px-4 sm:px-8">
+        <div class="text-center mb-14">
+            <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">What We Offer</span>
+            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">Operational Capabilities</h2>
+            <p class="text-xs text-slate-500 mt-3 max-w-lg mx-auto leading-relaxed">Six freight modalities engineered for enterprise-grade distribution at any scale.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="services-grid"></div>
+        <div class="text-center mt-10">
+            <a href="about.html" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-400 hover:text-blue-300 transition border border-blue-500/20 px-6 py-3 rounded-xl hover:border-blue-500/40">View All Capabilities <i class="fa-solid fa-arrow-right text-xs"></i></a>
+        </div>
+    </section>
+
+    <!-- ── HOW IT WORKS ────────────────────────────────────────── -->
+    <section id="how-it-works" class="bg-[#080b12] border-t border-b border-slate-900 py-16 sm:py-24 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">The Process</span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">How LogiSwift Works</h2>
+                <p class="text-xs text-slate-500 mt-3 max-w-lg mx-auto">From intake to door-step — four precision stages, zero guesswork.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="hiw-grid"></div>
+        </div>
+    </section>
+
+    <!-- ── INCOMING PRODUCTS SEARCH ───────────────────────────── -->
+    <section id="incoming" class="max-w-7xl mx-auto py-16 sm:py-20 px-4 sm:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-3">Incoming Cargo</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white mb-4">Search for Incoming Products</h2>
+                <p class="text-slate-400 text-sm leading-relaxed mb-6">Are you expecting a delivery? Search by your company name, sender name, or tracking ID to find all shipments heading your way.</p>
+                <div class="space-y-3 text-xs">
+                    <div class="flex items-center gap-3 text-slate-400"><div class="w-6 h-6 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-building text-[9px]"></i></div>Search by your company name</div>
+                    <div class="flex items-center gap-3 text-slate-400"><div class="w-6 h-6 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-fingerprint text-[9px]"></i></div>Look up a specific tracking ID</div>
+                    <div class="flex items-center gap-3 text-slate-400"><div class="w-6 h-6 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-filter text-[9px]"></i></div>Filter results by shipment status</div>
+                    <div class="flex items-center gap-3 text-slate-400"><div class="w-6 h-6 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-layer-group text-[9px]"></i></div>Track up to 10 IDs at once</div>
+                </div>
+            </div>
+            <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex gap-2 mb-5">
+                    <button onclick="switchIncoming('id')" id="inc-tab-id" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-wider rounded-xl bg-blue-600 text-white border border-blue-500/20 transition">By Tracking ID</button>
+                    <button onclick="switchIncoming('name')" id="inc-tab-name" class="flex-1 py-2.5 text-[10px] font-bold uppercase tracking-wider rounded-xl bg-slate-900 text-slate-400 border border-slate-800 hover:text-white transition">By Company Name</button>
+                </div>
+                <div id="inc-panel-id">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Tracking ID</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="inc-id-input" placeholder="e.g., LS-1001" class="flex-1 bg-[#0e1422] border border-slate-800 rounded-xl px-4 py-3 text-xs font-mono text-white outline-none focus:border-blue-500/50 transition" onkeypress="if(event.key==='Enter')doIncomingSearch()">
+                        <button onclick="doIncomingSearch()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-5 py-3 rounded-xl transition active:scale-95">Search</button>
+                    </div>
+                </div>
+                <div id="inc-panel-name" class="hidden">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Company / Receiver Name</label>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="inc-name-input" placeholder="e.g., Apex Global Industrial" class="flex-1 bg-[#0e1422] border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-blue-500/50 transition" onkeypress="if(event.key==='Enter')doIncomingSearch()">
+                        <button onclick="doIncomingSearch()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-5 py-3 rounded-xl transition active:scale-95">Search</button>
+                    </div>
+                    <select id="inc-status-filter" class="w-full bg-[#111827] border border-slate-800 rounded-xl px-4 py-3 text-xs text-white outline-none focus:border-blue-500/50 transition">
+                        <option value="">All statuses</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="Out for Delivery">Out for Delivery</option>
+                        <option value="Manifest Created">Manifest Created</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                </div>
+                <div id="inc-results" class="mt-4 space-y-2 max-h-72 overflow-y-auto"></div>
+                <a href="tracking.html" class="block mt-5 text-center text-[10px] font-bold uppercase tracking-widest text-blue-400 hover:text-blue-300 transition">
+                    <i class="fa-solid fa-arrow-up-right-from-square mr-1.5"></i>Open full tracking page
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── NETWORK COVERAGE ────────────────────────────────────── -->
+    <section id="network" class="bg-[#080b12] border-t border-b border-slate-900 py-16 sm:py-20 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Global Reach</span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white">Our Network Coverage</h2>
+                <p class="text-xs text-slate-500 mt-3 max-w-lg mx-auto">60+ countries. 500+ carrier partners. Every major port, airport, and rail hub — connected.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10" id="network-grid"></div>
+            <div class="bg-slate-950 border border-slate-800/60 rounded-2xl p-6 sm:p-8">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-5 text-center">Key Trade Lane Corridors</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="lanes-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FREIGHT RATE CALCULATOR ─────────────────────────────── -->
+    <section id="calculator" class="max-w-4xl mx-auto py-16 sm:py-24 px-4 sm:px-8">
+        <div class="text-center mb-12">
+            <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Instant Pricing</span>
+            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">Freight Rate Calculator</h2>
+            <p class="text-xs text-slate-500 mt-3 max-w-lg mx-auto">Get an instant freight estimate. Final quotes confirmed by our routing desk.</p>
+        </div>
+        <div class="bg-slate-950 border border-slate-800/60 rounded-2xl p-6 sm:p-10 shadow-2xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div><label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Weight (KG)</label><input type="number" id="calc-weight" min="0.1" step="0.1" placeholder="25.5" class="calc-input" oninput="calculateRate()"></div>
+                <div><label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Route Type</label>
+                    <select id="calc-route" class="calc-input" onchange="calculateRate()">
+                        <option value="domestic">Domestic</option>
+                        <option value="regional">Regional (Same Continent)</option>
+                        <option value="international" selected>International</option>
+                    </select>
+                </div>
+                <div><label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Service Level</label>
+                    <select id="calc-service" class="calc-input" onchange="calculateRate()">
+                        <option value="economy">Economy (7–14 days)</option>
+                        <option value="standard" selected>Standard (3–5 days)</option>
+                        <option value="express">Express (1–2 days)</option>
+                    </select>
+                </div>
+                <div><label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Declared Value (USD)</label><input type="number" id="calc-value" min="0" step="1" placeholder="5000" class="calc-input" oninput="calculateRate()"></div>
+            </div>
+            <div id="calc-result" class="hidden bg-[#0b0f1a] border border-slate-800 rounded-xl p-5 sm:p-6 fade-up">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
+                    <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Quote Breakdown</span>
+                    <span class="text-[10px] font-mono text-slate-600">Estimate only — not binding</span>
+                </div>
+                <div class="space-y-2.5 text-xs" id="calc-breakdown"></div>
+                <div class="border-t border-slate-800 mt-5 pt-4 flex items-center justify-between">
+                    <span class="text-sm font-black text-white uppercase tracking-wider">Total Estimate</span>
+                    <span id="calc-total" class="text-xl font-black text-blue-400 font-mono">$0.00</span>
+                </div>
+                <a href="#contact" class="block mt-5 w-full bg-blue-600 hover:bg-blue-500 text-white text-center font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition active:scale-95">Request Formal Quote</a>
+            </div>
+            <div id="calc-placeholder" class="py-10 text-center text-slate-600 text-xs font-mono tracking-widest">
+                <i class="fa-solid fa-calculator text-2xl text-slate-800 mb-3 block"></i>Enter cargo parameters above to generate an instant estimate.
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PRICING PLANS ───────────────────────────────────────── -->
+    <section id="pricing" class="bg-[#080b12] border-t border-b border-slate-900 py-16 sm:py-24 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Transparent Pricing</span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white">Plans for Every Scale</h2>
+                <p class="text-xs text-slate-500 mt-3 max-w-lg mx-auto">No hidden fees. No surprises. Every plan includes real-time tracking and dedicated support.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="pricing-grid"></div>
+        </div>
+    </section>
+
+    <!-- ── TESTIMONIALS ────────────────────────────────────────── -->
+    <section id="testimonials" class="py-16 sm:py-24 px-4 sm:px-6 relative">
+        <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-indigo-600/5 blur-[100px] rounded-full pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Client Validation</span>
+                <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">What Our Partners Say</h2>
+            </div>
+            <div class="bg-slate-950 rounded-2xl p-6 sm:p-12 border border-slate-800/60 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-4 right-8 text-slate-900 text-[120px] font-serif pointer-events-none select-none leading-none">"</div>
+                <div id="slider-content" class="min-h-[220px] sm:min-h-[140px] flex flex-col justify-between relative z-10"></div>
+                <div class="flex items-center justify-between border-t border-slate-900 pt-6 mt-6 relative z-10">
+                    <div id="slider-dots" class="flex space-x-3 py-2"></div>
+                    <div class="flex space-x-2">
+                        <button onclick="prevSlide()" class="w-11 h-11 border border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:border-slate-700 hover:text-white transition bg-[#0e1422] active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button onclick="nextSlide()" class="w-11 h-11 border border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:border-slate-700 hover:text-white transition bg-[#0e1422] active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── PROHIBITED ITEMS ────────────────────────────────────── -->
+    <section class="bg-slate-950 border-t border-b border-slate-900 py-14 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <h3 class="text-sm font-bold text-white tracking-widest uppercase mb-3">Prohibited Manifest Classifications</h3>
+            <p class="text-slate-500 max-w-xl mx-auto text-xs mb-8 leading-relaxed">The following are excluded from all LogiSwift carrier networks for safety and regulatory compliance:</p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] font-mono tracking-widest uppercase font-bold" id="prohibited-grid"></div>
+        </div>
+    </section>
+
+    <!-- ── FAQ ────────────────────────────────────────────────── -->
+    <section id="faq" class="max-w-4xl mx-auto py-16 sm:py-24 px-4 sm:px-8">
+        <div class="text-center mb-12">
+            <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block mb-2">Support</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white">Frequently Asked Questions</h2>
+        </div>
+        <div id="faq-container" class="space-y-3"></div>
+        <div class="text-center mt-8">
+            <a href="#contact" class="text-xs font-bold uppercase tracking-widest text-blue-400 hover:text-blue-300 transition">Can't find your answer? Contact us <i class="fa-solid fa-arrow-right ml-1"></i></a>
+        </div>
+    </section>
+
+    <!-- ── NEWSLETTER ──────────────────────────────────────────── -->
+    <section id="newsletter" class="bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 border-t border-b border-slate-800/40 py-14 px-4 sm:px-6">
+        <div class="max-w-2xl mx-auto text-center">
+            <i class="fa-solid fa-envelope-open-text text-blue-400 text-2xl mb-4 block"></i>
+            <h3 class="text-xl sm:text-2xl font-black text-white mb-3">Stay Ahead of the Supply Chain</h3>
+            <p class="text-slate-400 text-xs mb-7 leading-relaxed">Get weekly logistics intelligence: market rate updates, regulatory changes, and route disruption alerts — straight to your inbox.</p>
+            <form id="newsletter-form" onsubmit="handleNewsletterSubmit(event)" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" id="newsletter-email" placeholder="your@company.com" required class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition placeholder:text-slate-600">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-7 py-3.5 rounded-xl transition active:scale-95">Subscribe</button>
+            </form>
+            <p id="newsletter-status" class="hidden mt-4 text-xs font-mono text-emerald-400"></p>
+            <p class="text-slate-700 text-[10px] mt-4 font-mono">No spam. Unsubscribe anytime. We respect your privacy.</p>
+        </div>
+    </section>
+
+    <!-- ── CONTACT ─────────────────────────────────────────────── -->
+    <section id="contact" class="max-w-6xl mx-auto py-20 sm:py-28 px-4 sm:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+            <div class="lg:col-span-2 space-y-6">
+                <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest block">Get in Touch</span>
+                <h3 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">Connect with our Routing Desk</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Custom cargo requirements, bulk logistics, or enterprise partnerships — our operations team responds within 24 hours.</p>
+                <div class="space-y-4 pt-2">
+                    <div class="flex items-center space-x-3.5 text-xs text-slate-300"><div class="w-9 h-9 bg-slate-950 border border-slate-800/80 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-building-shield"></i></div><span>HQ: Terminal Area Core, Secure Transit Node</span></div>
+                    <div class="flex items-center space-x-3.5 text-xs text-slate-300"><div class="w-9 h-9 bg-slate-950 border border-slate-800/80 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-headset"></i></div><span>support@logiswift.delivery</span></div>
+                    <div class="flex items-center space-x-3.5 text-xs text-slate-300"><div class="w-9 h-9 bg-slate-950 border border-slate-800/80 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-clock"></i></div><span>Response within 24 hours</span></div>
+                    <div class="flex items-center space-x-3.5 text-xs text-slate-300"><div class="w-9 h-9 bg-slate-950 border border-slate-800/80 rounded-lg flex items-center justify-center text-blue-400 flex-shrink-0"><i class="fa-solid fa-globe"></i></div><span>Operations in 60+ countries</span></div>
+                </div>
+            </div>
+            <div class="lg:col-span-3 bg-slate-950/50 p-6 sm:p-8 rounded-2xl border border-slate-800/60 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"></div>
+                <!-- SETUP: Replace YOUR_FORMSPREE_ID_HERE with your Formspree form ID from https://formspree.io -->
+                <form id="contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" method="POST" onsubmit="handleContactSubmit(event)" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Full Name</label>
+                            <input type="text" name="name" id="contact-name" placeholder="Your Name" required class="w-full bg-[#0e1422] border border-slate-800/80 rounded-xl p-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Email Address</label>
+                            <input type="email" name="email" placeholder="name@company.com" required class="w-full bg-[#0e1422] border border-slate-800/80 rounded-xl p-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Company</label>
+                        <input type="text" name="company" placeholder="Your Company Name" class="w-full bg-[#0e1422] border border-slate-800/80 rounded-xl p-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Subject</label>
+                        <select name="subject" class="w-full bg-[#0e1422] border border-slate-800/80 rounded-xl p-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition">
+                            <option value="">Select a topic...</option>
+                            <option>Request a Freight Quote</option>
+                            <option>Track a Shipment Issue</option>
+                            <option>Enterprise Partnership</option>
+                            <option>Customs & Compliance Query</option>
+                            <option>Cold Chain Enquiry</option>
+                            <option>General Enquiry</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Message</label>
+                        <textarea name="message" rows="4" placeholder="Describe your logistics requirements..." required class="w-full bg-[#0e1422] border border-slate-800/80 rounded-xl p-3.5 text-xs text-white outline-none focus:border-blue-500/50 transition resize-none"></textarea>
+                    </div>
+                    <button type="submit" id="contact-submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest py-4 rounded-xl transition shadow-lg shadow-blue-600/10 active:scale-95">Send Message</button>
+                </form>
+                <div id="contact-status" class="hidden mt-4 p-4 font-mono text-center text-xs rounded-xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── FOOTER ──────────────────────────────────────────────── -->
+    <footer class="bg-[#070a11] border-t border-slate-900/40 pt-16 pb-8 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-5">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-compass text-white"></i></div>
+                        <div><span class="text-white font-black text-base block">LogiSwift</span><span class="text-[9px] text-slate-600 tracking-widest uppercase">Global Transits</span></div>
+                    </div>
+                    <p class="text-slate-600 text-xs leading-relaxed max-w-xs">Enterprise freight forwarding across 60+ countries. Real-time tracking, instant quotes, and zero-surprise logistics.</p>
+                    <div class="flex gap-3 mt-5">
+                        <a href="#" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-600 hover:text-blue-400 hover:border-blue-500/20 transition"><i class="fa-brands fa-linkedin-in text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-600 hover:text-blue-400 hover:border-blue-500/20 transition"><i class="fa-brands fa-x-twitter text-xs"></i></a>
+                        <a href="#" class="w-8 h-8 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-600 hover:text-blue-400 hover:border-blue-500/20 transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-[10px] uppercase tracking-widest mb-4">Services</h5>
+                    <ul class="space-y-2.5 text-xs text-slate-600">
+                        <li><a href="#services" class="hover:text-slate-300 transition">Air Freight</a></li>
+                        <li><a href="#services" class="hover:text-slate-300 transition">Ocean Freight</a></li>
+                        <li><a href="#services" class="hover:text-slate-300 transition">Ground Transport</a></li>
+                        <li><a href="#services" class="hover:text-slate-300 transition">Cold Chain</a></li>
+                        <li><a href="#services" class="hover:text-slate-300 transition">Customs Clearance</a></li>
+                        <li><a href="#services" class="hover:text-slate-300 transition">Warehousing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-[10px] uppercase tracking-widest mb-4">Company</h5>
+                    <ul class="space-y-2.5 text-xs text-slate-600">
+                        <li><a href="about.html" class="hover:text-slate-300 transition">About Us</a></li>
+                        <li><a href="about.html#team" class="hover:text-slate-300 transition">Leadership Team</a></li>
+                        <li><a href="about.html#certifications" class="hover:text-slate-300 transition">Certifications</a></li>
+                        <li><a href="#testimonials" class="hover:text-slate-300 transition">Case Studies</a></li>
+                        <li><a href="#newsletter" class="hover:text-slate-300 transition">Newsletter</a></li>
+                        <li><a href="#contact" class="hover:text-slate-300 transition">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-[10px] uppercase tracking-widest mb-4">Support</h5>
+                    <ul class="space-y-2.5 text-xs text-slate-600">
+                        <li><a href="tracking.html" class="hover:text-slate-300 transition">Track a Shipment</a></li>
+                        <li><a href="#faq" class="hover:text-slate-300 transition">FAQ</a></li>
+                        <li><a href="#calculator" class="hover:text-slate-300 transition">Rate Calculator</a></li>
+                        <li><a href="#contact" class="hover:text-slate-300 transition">Contact Support</a></li>
+                        <li><a href="#" class="hover:text-slate-300 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-slate-300 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-900 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-700">
+                <p>&copy; 2026 LogiSwift Systems Collective. All rights reserved.</p>
+                <div class="flex items-center gap-4">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-blue-500/40"></i>SSL Secured</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-certificate text-blue-500/40"></i>ISO 9001 Certified</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-lock text-blue-500/40"></i>GDPR Compliant</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<script>
+    const API_BASE = "https://github-io-go.onrender.com/api";
+    // Escapes untrusted text before it is inserted into innerHTML, preventing stored/reflected XSS.
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));
+    }
+
+    // ── Static data ───────────────────────────────────────────
+    const services = [
+        { icon:"fa-plane-up", badge:"Fastest", color:"blue", title:"Priority Air Freight", desc:"Next-flight-out routing with absolute priority. Ideal for time-critical, high-value cargo worldwide." },
+        { icon:"fa-ship", badge:"Cost-Effective", color:"indigo", title:"Ocean Freight (FCL/LCL)", desc:"Full-container and groupage solutions across all major global port routes with customs pre-clearance." },
+        { icon:"fa-truck-fast", badge:"Popular", color:"purple", title:"Ground Transport", desc:"Heavy multi-axle freight across dense overland lanes with full GPS telemetry and live ETAs." },
+        { icon:"fa-temperature-low", badge:"Specialist", color:"cyan", title:"Cold Chain Logistics", desc:"Temperature-controlled corridors for pharma, perishables, and biological payloads. GDP compliant." },
+        { icon:"fa-passport", badge:"Compliance", color:"amber", title:"Customs Clearance", desc:"End-to-end customs representation in 60+ countries. HS classification, duty estimation & docs." },
+        { icon:"fa-warehouse", badge:"Storage", color:"emerald", title:"Bonded Warehousing", desc:"Secure bonded storage at key transit hubs. Pick-and-pack, inventory management, and cross-docking." },
+    ];
+    const colSvc = { blue:"bg-blue-500/5 text-blue-400 border-blue-500/10 group-hover:bg-blue-600 group-hover:text-white", indigo:"bg-indigo-500/5 text-indigo-400 border-indigo-500/10 group-hover:bg-indigo-600 group-hover:text-white", purple:"bg-purple-500/5 text-purple-400 border-purple-500/10 group-hover:bg-purple-600 group-hover:text-white", cyan:"bg-cyan-500/5 text-cyan-400 border-cyan-500/10 group-hover:bg-cyan-600 group-hover:text-white", amber:"bg-amber-500/5 text-amber-400 border-amber-500/10 group-hover:bg-amber-600 group-hover:text-white", emerald:"bg-emerald-500/5 text-emerald-400 border-emerald-500/10 group-hover:bg-emerald-600 group-hover:text-white" };
+    const sg = document.getElementById('services-grid');
+    services.forEach(s => { sg.innerHTML += `<div class="p-6 border border-slate-900 rounded-xl bg-slate-950/80 hover:border-slate-700 transition-all duration-300 group flex items-start gap-4 relative overflow-hidden"><div class="absolute top-3 right-3"><span class="text-[9px] font-mono font-black uppercase tracking-widest px-2 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/10">${s.badge}</span></div><div class="w-12 h-12 border rounded-xl flex-shrink-0 flex items-center justify-center transition-all duration-300 ${colSvc[s.color]}"><i class="fa-solid ${s.icon} text-lg"></i></div><div class="pr-12"><h4 class="font-bold text-white text-sm mb-2">${s.title}</h4><p class="text-xs text-slate-500 leading-relaxed">${s.desc}</p></div></div>`; });
+
+    const hiwSteps = [
+        { icon:"fa-file-pen", color:"blue", n:"01", title:"Manifest Intake", desc:"Submit cargo details. We validate compliance, HS codes, and documentation before registration." },
+        { icon:"fa-passport", color:"indigo", n:"02", title:"Customs Clearance", desc:"Our agents handle regulatory docs, duties, and approvals across 60+ jurisdictions." },
+        { icon:"fa-truck-fast", color:"purple", n:"03", title:"Active Transit", desc:"Cargo moves through our carrier network. Track every checkpoint with your ID." },
+        { icon:"fa-circle-check", color:"emerald", n:"04", title:"Confirmed Delivery", desc:"Proof-of-delivery with timestamped records. Full audit trail for compliance." },
+    ];
+    const colHiw = { blue:"bg-blue-500/10 text-blue-400 border-blue-500/20", indigo:"bg-indigo-500/10 text-indigo-400 border-indigo-500/20", purple:"bg-purple-500/10 text-purple-400 border-purple-500/20", emerald:"bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
+    const hg = document.getElementById('hiw-grid');
+    hiwSteps.forEach(s => { hg.innerHTML += `<div class="p-6 bg-slate-950/40 border border-slate-800/50 rounded-2xl hover:border-slate-700 transition-all duration-300"><div class="text-[10px] font-mono font-black text-slate-700 mb-3">STEP ${s.n}</div><div class="w-11 h-11 ${colHiw[s.color]} border rounded-xl flex items-center justify-center mb-4"><i class="fa-solid ${s.icon}"></i></div><h4 class="font-bold text-white text-sm mb-2">${s.title}</h4><p class="text-xs text-slate-500 leading-relaxed">${s.desc}</p></div>`; });
+
+    const networkRegions = [
+        { region:"Europe", icon:"fa-landmark", detail:"35 countries, 120+ ports & airports", color:"blue" },
+        { region:"Asia Pacific", icon:"fa-pagelines", detail:"15 countries, 200+ hubs", color:"indigo" },
+        { region:"Middle East & Africa", icon:"fa-sun", detail:"12 countries, 80+ lanes", color:"amber" },
+        { region:"Americas", icon:"fa-map-location-dot", detail:"8 countries, 100+ corridors", color:"emerald" },
+    ];
+    const colNet = { blue:"bg-blue-500/10 text-blue-400 border-blue-500/20", indigo:"bg-indigo-500/10 text-indigo-400 border-indigo-500/20", amber:"bg-amber-500/10 text-amber-400 border-amber-500/20", emerald:"bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
+    const ng = document.getElementById('network-grid');
+    networkRegions.forEach(r => { ng.innerHTML += `<div class="bg-slate-950/40 border border-slate-800/50 rounded-xl p-5 text-center hover:border-slate-700 transition"><div class="w-10 h-10 ${colNet[r.color]} border rounded-xl flex items-center justify-center mx-auto mb-3"><i class="fa-solid ${r.icon}"></i></div><h4 class="text-white font-bold text-xs uppercase tracking-wider mb-1">${r.region}</h4><p class="text-slate-600 text-[10px] font-mono">${r.detail}</p></div>`; });
+
+    const lanes = [
+        { from:"🇬🇧 UK / Europe", to:"🇨🇳 China / Asia", modes:["Air","Ocean FCL","Ocean LCL"] },
+        { from:"🇺🇸 North America", to:"🇪🇺 Europe", modes:["Air","Ocean FCL","Express"] },
+        { from:"🇦🇪 UAE / Gulf", to:"🌍 Africa", modes:["Air","Ground","Ocean"] },
+    ];
+    const laneG = document.getElementById('lanes-grid');
+    lanes.forEach(l => { laneG.innerHTML += `<div class="bg-[#0b0f1a] border border-slate-800 rounded-xl p-4"><div class="text-xs font-semibold text-white mb-1">${l.from} <i class="fa-solid fa-arrow-right text-blue-500/60 mx-2 text-[10px]"></i> ${l.to}</div><div class="flex gap-1.5 mt-2 flex-wrap">${l.modes.map(m=>`<span class="text-[9px] font-mono bg-blue-500/10 text-blue-400 border border-blue-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">${m}</span>`).join('')}</div></div>`; });
+
+    const pricing = [
+        { name:"Starter", price:"$199", period:"/mo", highlight:false, features:["Up to 50 shipments/month","Real-time tracking dashboard","Standard email support","Basic freight calculator","7 transit stage tracking","Waybill generation"] },
+        { name:"Business", price:"$499", period:"/mo", highlight:true, badge:"Most Popular", features:["Up to 250 shipments/month","Priority routing & customs","Dedicated account manager","Full PDF export suite","Advanced analytics","API access","Multi-user admin console","Cold chain options"] },
+        { name:"Enterprise", price:"Custom", period:"", highlight:false, features:["Unlimited shipments","Custom SLA agreements","White-label tracking portal","Dedicated carrier contracts","On-site compliance support","24/7 phone support","Custom integrations","Volume discounts"] },
+    ];
+    const pricingGrid = document.getElementById('pricing-grid');
+    pricing.forEach(p => {
+        pricingGrid.innerHTML += `
+        <div class="pricing-card relative bg-${p.highlight?'slate-900 border-blue-500/40 shadow-xl shadow-blue-500/10':'slate-950/40 border-slate-800/50'} border rounded-2xl p-7 flex flex-col">
+            ${p.badge ? `<div class="absolute -top-3 left-1/2 -translate-x-1/2"><span class="text-[9px] font-black uppercase tracking-widest bg-blue-600 text-white px-4 py-1.5 rounded-full shadow-lg">${p.badge}</span></div>` : ''}
+            <div class="mb-6">
+                <h3 class="text-white font-black text-sm uppercase tracking-wider mb-3">${p.name}</h3>
+                <div class="flex items-end gap-1"><span class="text-3xl font-black text-white">${p.price}</span><span class="text-slate-500 text-xs mb-1">${p.period}</span></div>
+            </div>
+            <ul class="space-y-2.5 flex-1 mb-6">
+                ${p.features.map(f=>`<li class="flex items-center gap-2.5 text-xs text-slate-400"><i class="fa-solid fa-check text-blue-500 text-[10px] flex-shrink-0"></i>${f}</li>`).join('')}
+            </ul>
+            <a href="#contact" class="block w-full text-center font-bold text-xs uppercase tracking-widest py-3.5 rounded-xl transition active:scale-95 ${p.highlight?'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/20':'bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white'}">Get Started</a>
+        </div>`;
+    });
+
+    const testimonials = [
+        { quote:"Migrating our fulfillment into this framework reduced customs clearance times by 35%. The telemetry outputs parse with absolute clock precision.", author:"Marcus Vance", role:"VP of Infrastructure, Apex Advanced Technologies", rating:5 },
+        { quote:"The rate calculator handles heavy billing estimations flawlessly, enabling us to lock margins securely inside procurement sessions.", author:"Sarah Jenkins", role:"Director of Clearances, Global Distribution Alliance", rating:5 },
+        { quote:"Asset tracking transparency remains mission critical for clinical lines. LogiSwift ensures audit readiness on every continent.", author:"Dr. Aris Thorne", role:"Head of Operations, BioNet Global Laboratories", rating:5 },
+        { quote:"We moved 40+ container loads through LogiSwift in Q1 with zero documentation errors. The admin console is a game changer for our ops team.", author:"James Okoro", role:"Logistics Director, PanAfrica Trade Corp", rating:5 },
+    ];
+    let currentSlide = 0, slideTimer;
+    function renderSlider() {
+        const d = testimonials[currentSlide];
+        let stars = '';
+        for(let i=0;i<5;i++) stars+=`<i class="fa-solid fa-shield-halved text-[10px] ${i<d.rating?'text-blue-500':'text-slate-800'}"></i>`;
+        document.getElementById('slider-content').innerHTML = `<div class="flex flex-col justify-between h-full"><div><div class="flex space-x-1.5 mb-4">${stars}</div><p class="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed italic">"${d.quote}"</p></div><div class="mt-6 pl-4 border-l-2 border-blue-600"><strong class="text-white font-bold text-xs uppercase tracking-widest block">${d.author}</strong><span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mt-0.5 inline-block">${d.role}</span></div></div>`;
+        const dots = document.getElementById('slider-dots');
+        dots.innerHTML = '';
+        testimonials.forEach((_,i) => { dots.innerHTML+=`<button onclick="jumpSlide(${i})" class="h-1 rounded-full transition-all duration-300 ${i===currentSlide?'w-8 bg-blue-500':'w-3 bg-slate-800'}"></button>`; });
+    }
+    function nextSlide() { currentSlide=(currentSlide+1)%testimonials.length; renderSlider(); resetTimer(); }
+    function prevSlide() { currentSlide=(currentSlide-1+testimonials.length)%testimonials.length; renderSlider(); resetTimer(); }
+    function jumpSlide(i) { currentSlide=i; renderSlider(); resetTimer(); }
+    function resetTimer() { clearInterval(slideTimer); slideTimer=setInterval(nextSlide,7000); }
+
+    const prohibited = ["Lithium Configurations","Pressurized Volatiles","Bio-hazard Materials","Unregistered Assets","Counterfeit Goods","Live Animals","Currency / Bullion","Weapons & Ordnance"];
+    const pg = document.getElementById('prohibited-grid');
+    prohibited.forEach(item => { pg.innerHTML+=`<div class="bg-slate-950 border border-slate-900 text-slate-500 py-3.5 px-4 rounded-xl flex items-center justify-center hover:border-red-500/10 hover:text-slate-400 transition text-center"><i class="fa-solid fa-ban mr-2 text-red-500/40 text-[10px]"></i>${item}</div>`; });
+
+    const faqData = [
+        { q:"How do I track my shipment?", a:"Enter your LogiSwift tracking ID (format: LS-XXXX) in the tracking bar at the top of this page or visit our dedicated <a href='tracking.html' class='text-blue-400 underline'>tracking page</a> for multi-shipment search." },
+        { q:"Can I search for incoming products by company name?", a:"Yes. Use the 'Search for Incoming Products' section on this page or the 'Search by Name' tab on our tracking page to find all shipments associated with your company as sender or receiver." },
+        { q:"What is the difference between Economy, Standard, and Express?", a:"Economy (7–14 days) is cost-effective for non-urgent cargo. Standard (3–5 days) balances speed and cost. Express (1–2 days) uses priority air freight for time-critical shipments." },
+        { q:"Do you handle customs clearance?", a:"Yes. We provide end-to-end customs clearance in 60+ countries including HS code classification, duty estimation, and full documentation preparation." },
+        { q:"What is the maximum shipment weight or size?", a:"There is no hard limit. We handle parcels to full container loads (FCL). For oversized or overweight cargo, contact our routing desk for a custom assessment." },
+        { q:"How secure is the admin console?", a:"The admin panel uses UUID session tokens (not raw passwords), rate-limited login, 30-minute session expiry, and token-based API authentication. The password itself is never stored client-side." },
+        { q:"How do I get a formal freight quote?", a:"Use our Rate Calculator for an instant estimate, then click 'Request Formal Quote' or fill out the Contact form below. Our routing desk responds within 24 hours with a confirmed rate." },
+    ];
+    const fc = document.getElementById('faq-container');
+    faqData.forEach((item,i) => {
+        fc.innerHTML+=`<div class="bg-slate-950/40 border border-slate-800/60 rounded-xl overflow-hidden"><button onclick="toggleFaq(${i})" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-slate-900/40 transition" id="faq-btn-${i}"><span class="text-sm font-semibold text-white">${item.q}</span><i class="fa-solid fa-chevron-down text-xs text-blue-500 transition-transform duration-300" id="faq-icon-${i}"></i></button><div class="faq-answer px-5" id="faq-answer-${i}"><p class="text-xs text-slate-400 leading-relaxed pb-5">${item.a}</p></div></div>`;
+    });
+    function toggleFaq(idx) {
+        document.querySelectorAll('.faq-answer').forEach((a,i) => { a.classList.remove('open'); document.getElementById(`faq-icon-${i}`).style.transform=''; });
+        const el = document.getElementById(`faq-answer-${idx}`);
+        if (!el.classList.contains('open')) { el.classList.add('open'); document.getElementById(`faq-icon-${idx}`).style.transform='rotate(180deg)'; }
+    }
+
+    // Ticker
+    const carriers = ["✦ DHL","✦ FedEx","✦ Maersk","✦ MSC","✦ UPS","✦ Emirates SkyCargo","✦ CMA CGM","✦ Hapag-Lloyd","✦ DB Schenker","✦ Kuehne+Nagel","✦ CEVA Logistics","✦ Panalpina","✦ Agility","✦ Nippon Express","✦ Bollore Logistics"];
+    const ticker = document.getElementById('ticker');
+    const full = [...carriers,...carriers].join('   ');
+    ticker.innerHTML = `<span class="px-8">${full}</span><span class="px-8">${full}</span>`;
+
+    // ── Incoming search ───────────────────────────────────────
+    let incMode = 'id';
+    function switchIncoming(mode) {
+        incMode = mode;
+        document.getElementById('inc-panel-id').classList.toggle('hidden', mode !== 'id');
+        document.getElementById('inc-panel-name').classList.toggle('hidden', mode !== 'name');
+        const tabId = document.getElementById('inc-tab-id');
+        const tabName = document.getElementById('inc-tab-name');
+        if (mode === 'id') { tabId.classList.add('bg-blue-600','text-white','border-blue-500/20'); tabId.classList.remove('bg-slate-900','text-slate-400','border-slate-800'); tabName.classList.remove('bg-blue-600','text-white','border-blue-500/20'); tabName.classList.add('bg-slate-900','text-slate-400','border-slate-800'); }
+        else { tabName.classList.add('bg-blue-600','text-white','border-blue-500/20'); tabName.classList.remove('bg-slate-900','text-slate-400','border-slate-800'); tabId.classList.remove('bg-blue-600','text-white','border-blue-500/20'); tabId.classList.add('bg-slate-900','text-slate-400','border-slate-800'); }
+        document.getElementById('inc-results').innerHTML = '';
+    }
+
+    const STAGES = ["Manifest Created","Sorting Hub Allocation","Customs Clearing Arrays","In Transit","Port of Discharge Checkpoint","Out for Delivery","Delivered"];
+    const STAGE_ICONS = { "Manifest Created":"fa-file-invoice","Sorting Hub Allocation":"fa-boxes-packing","Customs Clearing Arrays":"fa-passport","In Transit":"fa-truck-fast","Port of Discharge Checkpoint":"fa-ship","Out for Delivery":"fa-dolly","Delivered":"fa-circle-check" };
+    const STATUS_STYLE = { "Manifest Created":"bg-slate-800 text-slate-300 border-slate-700","Sorting Hub Allocation":"bg-indigo-500/10 text-indigo-400 border-indigo-500/20","Customs Clearing Arrays":"bg-amber-500/10 text-amber-400 border-amber-500/20","In Transit":"bg-blue-500/10 text-blue-400 border-blue-500/20","Port of Discharge Checkpoint":"bg-purple-500/10 text-purple-400 border-purple-500/20","Out for Delivery":"bg-cyan-500/10 text-cyan-400 border-cyan-500/20","Delivered":"bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
+
+    async function doIncomingSearch() {
+        const results = document.getElementById('inc-results');
+        results.innerHTML = `<div class="text-center py-5"><div class="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mx-auto mb-2"></div><p class="text-[10px] font-mono text-slate-600">Searching manifest...</p></div>`;
+        try {
+            let url, data;
+            if (incMode === 'id') {
+                const id = document.getElementById('inc-id-input').value.trim().toUpperCase();
+                if (!id) { results.innerHTML = ''; return; }
+                const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(id)}`);
+                data = r.ok ? [await r.json()] : [];
+            } else {
+                const q = document.getElementById('inc-name-input').value.trim();
+                const status = document.getElementById('inc-status-filter').value;
+                if (!q) { results.innerHTML = ''; return; }
+                url = `${API_BASE}/shipments?search=${encodeURIComponent(q)}${status?`&status=${encodeURIComponent(status)}`:''}`;
+                const r = await fetch(url);
+                data = r.ok ? await r.json() : [];
+            }
+            if (!data.length) { results.innerHTML = `<div class="text-center py-6"><i class="fa-solid fa-inbox text-slate-700 text-xl mb-2"></i><p class="text-[10px] font-mono text-slate-600">No shipments matched that search.</p></div>`; return; }
+            results.innerHTML = data.map(item => `
+                <div class="bg-[#0e1422] border border-slate-800 rounded-xl p-3.5 hover:border-slate-700 transition">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-mono font-bold text-white text-xs">${escapeHtml(item.shipmentId)}</span>
+                        <span class="inline-flex items-center gap-1 text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded-full border ${STATUS_STYLE[item.status]||'bg-slate-800 text-slate-400 border-slate-700'}"><i class="fa-solid ${STAGE_ICONS[item.status]||'fa-box'} text-[7px]"></i>${escapeHtml(item.status)}</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mb-0.5"><span class="text-slate-600">TO</span> &nbsp;${escapeHtml(item.receiver)}</p>
+                    <p class="text-[10px] text-slate-500"><span class="text-slate-600">AT</span> &nbsp;${escapeHtml(item.location)} <span class="text-slate-700">&bull;</span> ${escapeHtml(item.weight)} KG</p>
+                    <a href="tracking.html" data-sid="${escapeHtml(item.shipmentId)}" class="track-recent-link inline-flex items-center gap-1 text-[9px] text-blue-400 hover:text-blue-300 transition mt-2 font-mono">View full details <i class="fa-solid fa-arrow-right text-[8px]"></i></a>
+                </div>`).join('');
+            results.querySelectorAll('.track-recent-link').forEach(a => {
+                a.addEventListener('click', () => {
+                    const sid = a.dataset.sid;
+                    const recents = [...JSON.parse(localStorage.getItem('ls_recents')||'[]').filter(x=>x!==sid), sid].slice(0,8);
+                    localStorage.setItem('ls_recents', JSON.stringify(recents));
+                });
+            });
+        } catch(e) {
+            results.innerHTML = `<div class="flex items-start gap-2.5 bg-amber-500/5 border border-amber-500/10 rounded-xl p-3.5"><i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm mt-0.5 flex-shrink-0"></i><p class="text-[10px] font-mono text-amber-400">Server may be waking up — try again in about 30 seconds.</p></div>`;
+        }
+    }
+
+    // ── Quick hero track ──────────────────────────────────────
+    document.getElementById('track-input').addEventListener('keypress', e => { if(e.key==='Enter') quickTrack(); });
+    async function quickTrack() {
+        const id = document.getElementById('track-input').value.trim().toUpperCase();
+        const box = document.getElementById('hero-track-result');
+        if (!id) return;
+        box.classList.remove('hidden');
+        box.innerHTML = `
+            <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center flex-shrink-0">
+                        <div class="w-4 h-4 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-white">Querying live manifest</p>
+                        <p class="text-[10px] font-mono text-slate-600">${escapeHtml(id)}</p>
+                    </div>
+                </div>
+                <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden mb-3"><div class="h-full w-1/3 bg-blue-600/60 rounded-full animate-pulse"></div></div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="h-10 bg-slate-900/80 rounded-lg animate-pulse"></div>
+                    <div class="h-10 bg-slate-900/80 rounded-lg animate-pulse"></div>
+                    <div class="h-10 bg-slate-900/80 rounded-lg animate-pulse"></div>
+                </div>
+            </div>`;
+        try {
+            const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(id)}`);
+            if (!r.ok) throw new Error('not_found');
+            const rec = await r.json();
+            const s = rec.status;
+            const stIdx = STAGES.indexOf(s);
+            const pct = stIdx>=0 ? Math.round(((stIdx+1)/STAGES.length)*100) : 0;
+            box.innerHTML = `
+            <div class="bg-slate-950/60 border border-slate-800 rounded-2xl overflow-hidden fade-up">
+                <!-- Header -->
+                <div class="p-5 border-b border-slate-900 flex items-start justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-10 h-10 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-barcode text-slate-500"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-white font-black font-mono text-sm tracking-wide truncate">${escapeHtml(rec.shipmentId)}</span>
+                                <button onclick="copyTrackingId('${escapeHtml(rec.shipmentId)}', this)" class="text-slate-600 hover:text-blue-400 transition flex-shrink-0" aria-label="Copy tracking ID" title="Copy tracking ID"><i class="fa-regular fa-copy text-[11px]"></i></button>
+                            </div>
+                            <span class="text-[10px] text-slate-500 block mt-0.5 truncate">${escapeHtml(rec.sender)} → ${escapeHtml(rec.receiver)}</span>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[8px] font-mono font-black uppercase border flex-shrink-0 ${STATUS_STYLE[s]||'bg-slate-800 text-slate-400 border-slate-700'}">
+                        <i class="fa-solid ${STAGE_ICONS[s] || 'fa-box'} text-[8px]"></i>${escapeHtml(s)}
+                    </span>
+                </div>
+
+                <!-- Progress -->
+                <div class="px-5 pt-4 pb-1">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Transit progress</span>
+                        <span class="text-[9px] font-mono text-slate-500">${pct}%</span>
+                    </div>
+                    <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-700" style="width:${pct}%"></div>
+                    </div>
+                    <div class="flex justify-between mt-1.5 mb-2">
+                        <span class="text-[8px] font-mono text-slate-700 uppercase">Origin</span>
+                        <span class="text-[8px] font-mono text-slate-700 uppercase">Delivered</span>
+                    </div>
+                </div>
+
+                <!-- Route info -->
+                <div class="px-5 py-4 grid grid-cols-3 gap-3 border-t border-slate-900 text-xs">
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Location</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-location-dot text-blue-500/60 mr-1"></i>${escapeHtml(rec.location)}</span></div>
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">ETA</span><span class="text-slate-300 font-medium"><i class="fa-regular fa-clock text-blue-500/60 mr-1"></i>${escapeHtml(rec.eta||'TBC')}</span></div>
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Weight</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-weight-hanging text-blue-500/60 mr-1"></i>${escapeHtml(rec.weight)} KG</span></div>
+                </div>
+
+                <a href="tracking.html" id="hero-view-timeline" class="flex items-center justify-center gap-2 border-t border-slate-900 text-blue-400 hover:text-blue-300 hover:bg-slate-900/60 text-[10px] font-bold uppercase tracking-widest py-3 transition">
+                    View full timeline & carrier notes <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                </a>
+            </div>`;
+            document.getElementById('hero-view-timeline').addEventListener('click', () => {
+                const recents = [id, ...JSON.parse(localStorage.getItem('ls_recents')||'[]').filter(x=>x!==id)].slice(0,8);
+                localStorage.setItem('ls_recents', JSON.stringify(recents));
+            });
+        } catch(e) {
+            const notFound = e.message === 'not_found';
+            box.innerHTML = `<div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 fade-up">
+                <div class="flex items-start gap-3 ${notFound?'bg-red-500/5 border border-red-500/10':'bg-amber-500/5 border border-amber-500/10'} p-4 rounded-xl">
+                    <i class="fa-solid ${notFound?'fa-circle-xmark text-red-400':'fa-triangle-exclamation text-amber-400'} text-lg mt-0.5 flex-shrink-0"></i>
+                    <div class="min-w-0">
+                        <strong class="text-white block font-bold text-sm mb-0.5">${notFound?'Shipment not found':'Connection error'}</strong>
+                        <span class="text-slate-400 text-xs">${notFound?`No record matches ID <span class="font-mono text-slate-300">${escapeHtml(id)}</span>. Double-check the ID and try again.`:'The tracking service may be starting up. Please wait about 30 seconds and retry.'}</span>
+                        <button onclick="quickTrack()" class="mt-3 inline-flex items-center gap-1.5 ${notFound?'bg-red-500/10 border-red-500/20 text-red-400 hover:bg-red-500/20':'bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500/20'} border px-3.5 py-2 rounded-lg transition text-[10px] font-bold uppercase tracking-widest"><i class="fa-solid fa-rotate-right text-[9px]"></i>Retry</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+    }
+    function copyTrackingId(id, btn) {
+        navigator.clipboard?.writeText(id).then(() => {
+            const icon = btn.querySelector('i');
+            icon.className = 'fa-solid fa-check text-[11px] text-emerald-400';
+            setTimeout(() => { icon.className = 'fa-regular fa-copy text-[11px]'; }, 1500);
+        }).catch(()=>{});
+    }
+
+    // ── Live stats ────────────────────────────────────────────
+    async function loadStats() {
+        try {
+            const r = await fetch(`${API_BASE}/stats`);
+            if (!r.ok) return;
+            const d = await r.json();
+            animCount('stat-total', d.total);
+            animCount('stat-transit', d.inTransit);
+            animCount('stat-delivered', d.delivered);
+            document.getElementById('stat-weight').textContent = parseFloat(d.totalWeightKg).toLocaleString() + ' KG';
+        } catch(e) { ['stat-total','stat-transit','stat-delivered','stat-weight'].forEach(id=>{ document.getElementById(id).textContent='N/A'; }); }
+    }
+    function animCount(id, target) {
+        const el = document.getElementById(id); if(!el||!target){if(el)el.textContent=target||0;return;}
+        let v=0; const step=Math.ceil(target/40);
+        const t=setInterval(()=>{ v=Math.min(v+step,target); el.textContent=v.toLocaleString(); if(v>=target)clearInterval(t); },30);
+    }
+
+    // ── Rate calculator ───────────────────────────────────────
+    const RATES = {economy:2.5,standard:4.8,express:8.5};
+    const ROUTE_MUL = {domestic:1.0,regional:1.5,international:2.5};
+    function calculateRate() {
+        const w=parseFloat(document.getElementById('calc-weight').value)||0;
+        const route=document.getElementById('calc-route').value;
+        const svc=document.getElementById('calc-service').value;
+        const val=parseFloat(document.getElementById('calc-value').value)||0;
+        if(w<=0){document.getElementById('calc-result').classList.add('hidden');document.getElementById('calc-placeholder').classList.remove('hidden');return;}
+        const base=Math.max(w*RATES[svc]*ROUTE_MUL[route],25);
+        const fuel=base*0.08;
+        const ins=val>0?Math.max(val*0.003,5):0;
+        const total=base+fuel+8+ins;
+        const fmt=v=>`$${v.toFixed(2)}`;
+        const rows=[{l:`Base freight (${w} KG × $${RATES[svc]}/KG)`,v:fmt(base)},{l:'Fuel surcharge (8%)',v:fmt(fuel)},{l:'Handling & documentation',v:fmt(8)},...(ins>0?[{l:`Cargo insurance (0.3% of $${val.toLocaleString()})`,v:fmt(ins)}]:[])];
+        document.getElementById('calc-breakdown').innerHTML=rows.map(r=>`<div class="flex justify-between text-slate-400"><span>${r.l}</span><span class="font-mono font-bold text-slate-300">${r.v}</span></div>`).join('');
+        document.getElementById('calc-total').textContent=fmt(total);
+        document.getElementById('calc-result').classList.remove('hidden');
+        document.getElementById('calc-placeholder').classList.add('hidden');
+    }
+
+    // ── Contact form ──────────────────────────────────────────
+    function handleContactSubmit(e) {
+        e.preventDefault();
+        const form=e.target, name=document.getElementById('contact-name').value;
+        const statusBox=document.getElementById('contact-status'), btn=document.getElementById('contact-submit-btn');
+        if(form.action.includes('YOUR_FORMSPREE_ID_HERE')){
+            statusBox.classList.remove('hidden');
+            statusBox.className='mt-4 p-4 bg-amber-500/5 border border-amber-500/10 text-amber-400 font-mono text-center text-xs rounded-xl';
+            statusBox.innerHTML=`<i class="fa-solid fa-triangle-exclamation mr-2"></i>Contact form not configured yet. Email us: <strong>support@logiswift.delivery</strong>`; return;
+        }
+        btn.disabled=true; btn.textContent='Sending...';
+        fetch(form.action,{method:form.method,body:new FormData(form),headers:{'Accept':'application/json'}})
+            .then(r=>{ statusBox.classList.remove('hidden'); if(r.ok){statusBox.className='mt-4 p-4 bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 font-mono text-center text-xs rounded-xl';statusBox.innerHTML=`<i class="fa-solid fa-circle-check mr-2"></i>Message sent! We'll reply to ${name} within 24 hours.`;form.reset();}else{statusBox.className='mt-4 p-4 bg-red-500/5 border border-red-500/10 text-red-400 font-mono text-center text-xs rounded-xl';statusBox.innerHTML=`<i class="fa-solid fa-circle-xmark mr-2"></i>Send failed. Please email support@logiswift.delivery`;}})
+            .catch(()=>{ statusBox.classList.remove('hidden');statusBox.className='mt-4 p-4 bg-red-500/5 border border-red-500/10 text-red-400 font-mono text-center text-xs rounded-xl';statusBox.innerHTML=`<i class="fa-solid fa-circle-xmark mr-2"></i>Network error. Email support@logiswift.delivery`; })
+            .finally(()=>{ btn.disabled=false; btn.textContent='Send Message'; });
+    }
+
+    // ── Newsletter ────────────────────────────────────────────
+    function handleNewsletterSubmit(e) {
+        e.preventDefault();
+        const status=document.getElementById('newsletter-status');
+        status.classList.remove('hidden');
+        status.textContent='✓ Subscribed! Welcome to LogiSwift Intelligence.';
+        document.getElementById('newsletter-form').reset();
+    }
+
+    // ── Cookie banner ─────────────────────────────────────────
+    function acceptCookies(type) {
+        localStorage.setItem('ls_cookie_consent', type);
+        const banner=document.getElementById('cookie-banner');
+        banner.style.transform='translateY(120%)';
+        setTimeout(()=>banner.remove(), 400);
+    }
+
+    // ── Back to top ───────────────────────────────────────────
+    const btt=document.getElementById('back-to-top');
+    window.addEventListener('scroll',()=>{
+        if(window.scrollY>400){btt.style.opacity='1';btt.style.pointerEvents='auto';}
+        else{btt.style.opacity='0';btt.style.pointerEvents='none';}
+    });
+
+    // ── Mobile menu ───────────────────────────────────────────
+    function toggleMobileMenu(){
+        const m=document.getElementById('mobile-menu'),ic=document.getElementById('menu-icon');
+        const h=m.classList.toggle('hidden');
+        ic.className=h?'fa-solid fa-bars-staggered text-slate-400 text-lg':'fa-solid fa-xmark text-lg text-white';
+    }
+
+    // ── Init ──────────────────────────────────────────────────
+    window.onload=function(){
+        // Cookie banner
+        if(localStorage.getItem('ls_cookie_consent')){ document.getElementById('cookie-banner').remove(); }
+
+        renderSlider(); slideTimer=setInterval(nextSlide,7000);
+        loadStats();
+    };
+</script>
+</body>
+</html>

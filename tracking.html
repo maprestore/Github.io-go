@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Shipments | LogiSwift Global Freight</title>
+    <meta name="description" content="Track multiple shipments at once, search by sender or receiver, and view your full transit history on LogiSwift.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        html { scroll-behavior: smooth; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .bg-noise { background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0); background-size: 24px 24px; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation: fadeUp 0.4s ease forwards; }
+        .result-card { animation: fadeUp 0.35s ease forwards; }
+        .tab-btn.active { background: #2563eb; color: #fff; border-color: rgba(59,130,246,0.3); }
+        .tab-btn { transition: all 0.2s; }
+        .progress-bar { transition: width 0.6s ease; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-300 antialiased">
+
+    <!-- NAV -->
+    <nav class="bg-[#0b0f19]/80 backdrop-blur-xl sticky top-0 z-50 border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-3.5">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-compass text-white text-base"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xl font-extrabold tracking-tight text-white leading-none">LogiSwift</span>
+                    <span class="text-[9px] text-slate-500 tracking-widest uppercase mt-1 font-semibold">Global Transits</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center space-x-8 text-xs font-bold uppercase tracking-widest text-slate-400">
+                <a href="index.html" class="hover:text-white transition-colors">Home</a>
+                <a href="index.html#services" class="hover:text-white transition-colors">Services</a>
+                <a href="tracking.html" class="text-blue-400">Track Shipment</a>
+                <a href="about.html" class="hover:text-white transition-colors">About Us</a>
+                <a href="index.html#contact" class="hover:text-white transition-colors">Contact</a>
+            </div>
+            <a href="index.html#contact" class="text-xs font-bold uppercase tracking-wider bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 rounded-xl transition-all duration-300">Get a Quote</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="relative py-16 sm:py-24 px-4 bg-noise border-b border-slate-900/60 overflow-hidden">
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-blue-600/8 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center space-x-2 bg-blue-500/5 text-blue-400 text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-blue-500/10 mb-5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                <span>Live Global Tracking System</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4 leading-tight">
+                Track your shipments,<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">anywhere in the world.</span>
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">Track single or multiple shipments, search by company name, and view full transit timelines with real-time status updates.</p>
+        </div>
+    </header>
+
+    <!-- SEARCH PANEL -->
+    <section class="max-w-4xl mx-auto px-4 py-10">
+
+        <!-- MODE TABS -->
+        <div class="flex gap-2 mb-6 bg-slate-950/60 border border-slate-800 rounded-2xl p-2">
+            <button onclick="setMode('single')" id="tab-single" class="tab-btn active flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center border border-transparent">
+                <i class="fa-solid fa-fingerprint mr-2"></i>Single ID
+            </button>
+            <button onclick="setMode('multi')" id="tab-multi" class="tab-btn flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center bg-slate-900 text-slate-400 border border-slate-800">
+                <i class="fa-solid fa-layer-group mr-2"></i>Multi-Track
+            </button>
+            <button onclick="setMode('search')" id="tab-search" class="tab-btn flex-1 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center bg-slate-900 text-slate-400 border border-slate-800">
+                <i class="fa-solid fa-magnifying-glass mr-2"></i>Search by Name
+            </button>
+        </div>
+
+        <!-- SINGLE TRACK -->
+        <div id="panel-single" class="fade-up">
+            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="flex-1 flex items-center px-4 bg-[#0e1422] rounded-xl border border-slate-800/60 focus-within:border-blue-500/50 transition-all">
+                        <i class="fa-solid fa-fingerprint text-slate-600 mr-3"></i>
+                        <input type="text" id="single-input" placeholder="Enter tracking ID (e.g., LS-1001)..." class="w-full py-4 bg-transparent outline-none text-sm font-mono font-medium text-white placeholder:text-slate-600" onkeypress="if(event.key==='Enter')doSingleTrack()">
+                    </div>
+                    <button onclick="doSingleTrack()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl transition active:scale-95">Track Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MULTI TRACK -->
+        <div id="panel-multi" class="hidden fade-up">
+            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-3">Enter up to 10 tracking IDs, one per line or comma-separated</label>
+                <textarea id="multi-input" rows="5" placeholder="LS-1001&#10;LS-1002&#10;LS-1003" class="w-full bg-[#0e1422] border border-slate-800 rounded-xl p-4 text-sm font-mono text-white outline-none focus:border-blue-500/50 transition resize-none placeholder:text-slate-600"></textarea>
+                <div class="flex items-center justify-between mt-3">
+                    <span id="multi-count" class="text-[10px] font-mono text-slate-600">0 IDs entered</span>
+                    <button onclick="doMultiTrack()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-8 py-3.5 rounded-xl transition active:scale-95">Track All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEARCH BY NAME -->
+        <div id="panel-search" class="hidden fade-up">
+            <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4">
+                <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                    <div class="flex-1 flex items-center px-4 bg-[#0e1422] rounded-xl border border-slate-800/60 focus-within:border-blue-500/50 transition-all">
+                        <i class="fa-solid fa-magnifying-glass text-slate-600 mr-3"></i>
+                        <input type="text" id="search-input" placeholder="Search by company name, sender, or receiver..." class="w-full py-4 bg-transparent outline-none text-sm text-white placeholder:text-slate-600" onkeypress="if(event.key==='Enter')doNameSearch()">
+                    </div>
+                    <button onclick="doNameSearch()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-xl transition active:scale-95">Search</button>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="text-[10px] text-slate-600 font-mono">Filter by status:</span>
+                    <select id="search-status-filter" class="bg-[#111827] border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none focus:border-blue-500/50">
+                        <option value="">All statuses</option>
+                        <option>Manifest Created</option>
+                        <option>Sorting Hub Allocation</option>
+                        <option>Customs Clearing Arrays</option>
+                        <option>In Transit</option>
+                        <option>Port of Discharge Checkpoint</option>
+                        <option>Out for Delivery</option>
+                        <option>Delivered</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT SEARCHES -->
+    <section class="max-w-4xl mx-auto px-4 mb-6" id="recent-section">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-600"><i class="fa-solid fa-clock-rotate-left mr-2"></i>Recent Searches</span>
+            <button onclick="clearRecents()" class="text-[10px] font-mono text-slate-700 hover:text-red-400 transition">Clear all</button>
+        </div>
+        <div id="recent-tags" class="flex flex-wrap gap-2"></div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="max-w-4xl mx-auto px-4 pb-20" id="results-section">
+        <div id="results-container"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#070a11] border-t border-slate-900/40 py-12 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-600">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-7 h-7 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-compass text-white text-xs"></i></div>
+                <span class="text-slate-500 font-bold text-xs">LogiSwift Systems</span>
+            </div>
+            <p>&copy; 2026 LogiSwift Systems Collective. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="index.html" class="hover:text-slate-400 transition">Home</a>
+                <a href="about.html" class="hover:text-slate-400 transition">About</a>
+                <a href="index.html#contact" class="hover:text-slate-400 transition">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ── FULLSCREEN IMAGE LIGHTBOX ─────────────────────────── -->
+    <div id="lightbox" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8" onclick="if(event.target===this)closeLightbox()">
+        <button onclick="closeLightbox()" aria-label="Close" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition z-10">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Cargo — full size" class="max-w-full max-h-full object-contain rounded-lg">
+    </div>
+
+<script>
+    const API_BASE = "https://github-io-go.onrender.com/api";
+    // Escapes untrusted text before it is inserted into innerHTML, preventing stored/reflected XSS.
+    function escapeHtml(str) {
+        return String(str ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));
+    }
+    // Only allow http(s) image URLs; blocks javascript:/data: URL-based attacks in <img src>.
+    function safeImageUrl(url) {
+        try { const u = new URL(url, location.href); return ['http:','https:'].includes(u.protocol) ? u.href : ''; }
+        catch { return ''; }
+    }
+    // ── Fullscreen image lightbox ───────────────────────────────
+    function openLightbox(url) {
+        const safe = safeImageUrl(url);
+        if (!safe) return;
+        document.getElementById('lightbox-img').src = safe;
+        document.getElementById('lightbox').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.add('hidden');
+        document.getElementById('lightbox-img').src = '';
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    const STAGES = ["Manifest Created","Sorting Hub Allocation","Customs Clearing Arrays","In Transit","Port of Discharge Checkpoint","Out for Delivery","Delivered"];
+    const STAGE_ICONS = { "Manifest Created":"fa-file-invoice","Sorting Hub Allocation":"fa-boxes-packing","Customs Clearing Arrays":"fa-passport","In Transit":"fa-truck-fast","Port of Discharge Checkpoint":"fa-ship","Out for Delivery":"fa-dolly","Delivered":"fa-circle-check" };
+    const STATUS_COLORS = { "Manifest Created":"text-slate-300 border-slate-700 bg-slate-800/60","Sorting Hub Allocation":"text-indigo-400 border-indigo-500/20 bg-indigo-500/10","Customs Clearing Arrays":"text-amber-400 border-amber-500/20 bg-amber-500/10","In Transit":"text-blue-400 border-blue-500/20 bg-blue-500/10","Port of Discharge Checkpoint":"text-purple-400 border-purple-500/20 bg-purple-500/10","Out for Delivery":"text-cyan-400 border-cyan-500/20 bg-cyan-500/10","Delivered":"text-emerald-400 border-emerald-500/20 bg-emerald-500/10" };
+
+    let currentMode = 'single';
+
+    // ── Mode tabs ─────────────────────────────────────────────
+    function setMode(mode) {
+        currentMode = mode;
+        ['single','multi','search'].forEach(m => {
+            const panel = document.getElementById(`panel-${m}`);
+            const tab = document.getElementById(`tab-${m}`);
+            if (m === mode) {
+                panel.classList.remove('hidden');
+                tab.classList.add('active');
+                tab.classList.remove('bg-slate-900','text-slate-400','border-slate-800');
+            } else {
+                panel.classList.add('hidden');
+                tab.classList.remove('active');
+                tab.classList.add('bg-slate-900','text-slate-400','border-slate-800');
+            }
+        });
+        document.getElementById('results-container').innerHTML = '';
+    }
+
+    // Multi input counter
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('multi-input').addEventListener('input', function() {
+            const ids = parseIds(this.value);
+            document.getElementById('multi-count').textContent = `${ids.length} ID${ids.length !== 1 ? 's' : ''} entered`;
+        });
+        renderRecents();
+        loadRecentSearchesSection();
+
+        // Deep link support: tracking.html?id=LS-1003 auto-runs a single-track lookup.
+        const deepLinkId = new URLSearchParams(location.search).get('id');
+        if (deepLinkId) {
+            document.getElementById('single-input').value = deepLinkId.trim().toUpperCase();
+            doSingleTrack();
+        }
+    });
+
+    function parseIds(raw) {
+        return raw.split(/[\n,]+/).map(s => s.trim().toUpperCase()).filter(s => s.length > 0).slice(0, 10);
+    }
+
+    // ── Single track ──────────────────────────────────────────
+    async function doSingleTrack() {
+        const id = document.getElementById('single-input').value.trim().toUpperCase();
+        if (!id) return;
+        saveRecent(id);
+        const container = document.getElementById('results-container');
+        container.innerHTML = renderLoader('Querying live servers...');
+        try {
+            const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(id)}`);
+            if (!r.ok) throw new Error('not_found');
+            const record = await r.json();
+            container.innerHTML = renderShipmentCard(record);
+        } catch(e) {
+            container.innerHTML = renderError(id, e.message === 'not_found');
+        }
+    }
+
+    // ── Multi track ───────────────────────────────────────────
+    async function doMultiTrack() {
+        const ids = parseIds(document.getElementById('multi-input').value);
+        if (!ids.length) return;
+        ids.forEach(id => saveRecent(id));
+        const container = document.getElementById('results-container');
+        container.innerHTML = renderLoader(`Querying ${ids.length} shipments...`);
+
+        const results = await Promise.allSettled(ids.map(id =>
+            fetch(`${API_BASE}/shipments/${encodeURIComponent(id)}`).then(r => r.ok ? r.json() : Promise.reject('not_found'))
+        ));
+
+        let html = `<div class="mb-4 text-[10px] font-mono text-slate-500 uppercase tracking-widest">${ids.length} shipment(s) queried — ${results.filter(r => r.status === 'fulfilled').length} found</div>`;
+        html += '<div class="space-y-4">';
+        results.forEach((res, i) => {
+            if (res.status === 'fulfilled') {
+                html += renderShipmentCard(res.value);
+            } else {
+                html += `<div class="bg-slate-950/40 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
+                    <i class="fa-solid fa-circle-xmark text-red-500/40 text-lg"></i>
+                    <div><strong class="text-white font-mono text-sm">${escapeHtml(ids[i])}</strong> <span class="text-slate-500 text-xs ml-2">— not found in registry</span></div>
+                </div>`;
+            }
+        });
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    // ── Search by name ────────────────────────────────────────
+    async function doNameSearch() {
+        const query = document.getElementById('search-input').value.trim();
+        const status = document.getElementById('search-status-filter').value;
+        if (!query) return;
+        const container = document.getElementById('results-container');
+        container.innerHTML = renderLoader(`Searching for "${escapeHtml(query)}"...`);
+        try {
+            let url = `${API_BASE}/shipments?search=${encodeURIComponent(query)}`;
+            if (status) url += `&status=${encodeURIComponent(status)}`;
+            const r = await fetch(url);
+            if (!r.ok) throw new Error('failed');
+            const data = await r.json();
+            if (!data.length) {
+                container.innerHTML = `<div class="text-center py-16 text-slate-600 font-mono text-xs tracking-widest"><i class="fa-solid fa-magnifying-glass text-2xl mb-3 block text-slate-800"></i>No shipments found matching "${escapeHtml(query)}".</div>`;
+                return;
+            }
+            container.innerHTML = `<div class="mb-4 text-[10px] font-mono text-slate-500 uppercase tracking-widest">${data.length} shipment(s) found matching "${escapeHtml(query)}"</div><div class="space-y-4">${data.map(r => renderShipmentCard(r, true)).join('')}</div>`;
+        } catch(e) {
+            container.innerHTML = `<div class="text-center py-16 text-amber-400 font-mono text-xs">Server may be waking up. Please try again in 30 seconds.</div>`;
+        }
+    }
+
+    // ── Render helpers ────────────────────────────────────────
+    function renderLoader(msg) {
+        return `<div class="text-center py-16">
+            <div class="w-9 h-9 border-4 border-blue-500/10 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-xs font-mono tracking-widest text-slate-500">${msg}</p>
+            <p class="text-[10px] text-slate-700 mt-2 font-mono">Server may take 30–60s to wake on first request.</p>
+        </div>`;
+    }
+
+    function renderError(id, notFound) {
+        return `<div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-6">
+            <div class="flex items-start gap-3 ${notFound ? 'bg-red-500/5 border border-red-500/10' : 'bg-amber-500/5 border border-amber-500/10'} p-4 rounded-xl">
+                <i class="fa-solid ${notFound ? 'fa-circle-xmark text-red-400' : 'fa-triangle-exclamation text-amber-400'} text-lg mt-0.5"></i>
+                <div>
+                    <strong class="text-white block font-bold text-sm mb-0.5">${notFound ? 'Shipment Not Found' : 'Connection Error'}</strong>
+                    <span class="text-slate-400 text-xs">${notFound ? `No record found for ID: ${escapeHtml(id)}` : 'Server may be starting up. Please wait 30–60s and try again.'}</span>
+                    ${!notFound ? `<button onclick="doSingleTrack()" class="mt-3 block bg-amber-500/10 border border-amber-500/20 text-amber-400 px-4 py-2 rounded-lg hover:bg-amber-500/20 transition text-xs font-bold">Retry</button>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function renderShipmentCard(record, compact = false) {
+        const statusStyle = STATUS_COLORS[record.status] || 'text-slate-300 border-slate-700 bg-slate-800/60';
+        const stageIdx = STAGES.indexOf(record.status);
+        const progressPct = stageIdx >= 0 ? Math.round(((stageIdx + 1) / STAGES.length) * 100) : 0;
+
+        let timelineHTML = '';
+        if (!compact) {
+            STAGES.forEach((stage, i) => {
+                const done = i <= stageIdx;
+                const current = i === stageIdx;
+                const iconBox = done ? (current ? 'bg-blue-600 text-white border-blue-400 shadow-lg shadow-blue-500/20' : 'bg-blue-950/60 text-blue-400 border-blue-500/20') : 'bg-slate-900 text-slate-700 border-slate-800';
+                const lineColor = i < stageIdx ? 'bg-blue-500' : 'bg-slate-800';
+                timelineHTML += `
+                    <div class="relative flex items-start ${i < STAGES.length-1 ? 'pb-7' : ''}">
+                        ${i < STAGES.length-1 ? `<div class="absolute left-5 top-10 bottom-0 w-[2px] ${lineColor}"></div>` : ''}
+                        <div class="w-10 h-10 rounded-xl border flex items-center justify-center text-xs flex-shrink-0 ${iconBox}"><i class="fa-solid ${STAGE_ICONS[stage] || 'fa-box'}"></i></div>
+                        <div class="ml-3 pt-1 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-mono font-semibold ${done ? 'text-white' : 'text-slate-600'} uppercase tracking-wide">${stage}</span>
+                                ${current ? '<span class="text-[8px] font-mono font-black bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase tracking-widest animate-pulse">Active</span>' : ''}
+                            </div>
+                            ${current ? `<p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-location-dot text-blue-400 mr-1"></i>${escapeHtml(record.location || 'Hub')}</p>` : ''}
+                            ${current && record.eta ? `<p class="text-[9px] font-mono text-slate-500 mt-0.5"><i class="fa-regular fa-clock mr-1"></i>ETA: ${escapeHtml(record.eta)}</p>` : ''}
+                        </div>
+                    </div>`;
+            });
+        }
+
+        return `
+            <div class="result-card bg-slate-950/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-slate-700 transition-all duration-300">
+                <!-- Card header -->
+                <div class="p-5 border-b border-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-center"><i class="fa-solid fa-barcode text-slate-500"></i></div>
+                        <div>
+                            <span class="text-white font-black font-mono text-base">${escapeHtml(record.shipmentId)}</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">${escapeHtml(record.weight)} KG &bull; ${escapeHtml(record.sender)} → ${escapeHtml(record.receiver)}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-mono font-black uppercase border ${statusStyle}">
+                            <i class="fa-solid ${STAGE_ICONS[record.status] || 'fa-box'} text-[8px]"></i>${escapeHtml(record.status)}
+                        </span>
+                        ${!compact ? `<button onclick="this.closest('.result-card').querySelector('.timeline-wrap').classList.toggle('hidden')" class="text-[9px] font-mono text-slate-500 hover:text-white transition bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">Details</button>` : ''}
+                    </div>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="px-5 pt-4 pb-2">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest">Transit progress</span>
+                        <span class="text-[9px] font-mono text-slate-500">${progressPct}%</span>
+                    </div>
+                    <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                        <div class="progress-bar h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full" style="width:${progressPct}%"></div>
+                    </div>
+                    <div class="flex justify-between mt-1.5">
+                        <span class="text-[8px] font-mono text-slate-700">Origin</span>
+                        <span class="text-[8px] font-mono text-slate-700">Delivered</span>
+                    </div>
+                </div>
+
+                <!-- Route info -->
+                <div class="px-5 py-4 grid grid-cols-3 gap-4 border-t border-slate-900 text-xs">
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Current Location</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-location-dot text-blue-500/60 mr-1"></i>${escapeHtml(record.location)}</span></div>
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">ETA</span><span class="text-slate-300 font-medium">${escapeHtml(record.eta || '—')}</span></div>
+                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Weight</span><span class="text-slate-300 font-medium">${escapeHtml(record.weight)} KG</span></div>
+                </div>
+
+                <!-- Timeline (hidden by default) -->
+                ${!compact ? `<div class="timeline-wrap hidden border-t border-slate-900 p-5">${timelineHTML}${record.notes ? `<div class="mt-4 p-3 bg-slate-900/60 rounded-lg border border-slate-800"><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-1">Notes</span><p class="text-xs text-slate-400">${escapeHtml(record.notes)}</p></div>` : ''}</div>` : ''}
+                ${record.imageUrl && safeImageUrl(record.imageUrl) ? `<div class="border-t border-slate-900 p-4"><img src="${escapeHtml(safeImageUrl(record.imageUrl))}" onclick="openLightbox('${escapeHtml(safeImageUrl(record.imageUrl))}')" class="w-full max-h-40 object-cover rounded-xl border border-slate-800 cursor-zoom-in hover:border-slate-700 transition" alt="Cargo — tap to view full size" loading="lazy"></div>` : ''}
+            </div>`;
+    }
+
+    // ── Recent searches ───────────────────────────────────────
+    function getRecents() { try { return JSON.parse(localStorage.getItem('ls_recents') || '[]'); } catch(e) { return []; } }
+    function saveRecent(id) {
+        const r = getRecents().filter(x => x !== id);
+        r.unshift(id);
+        localStorage.setItem('ls_recents', JSON.stringify(r.slice(0, 8)));
+        renderRecents();
+    }
+    function clearRecents() { localStorage.removeItem('ls_recents'); renderRecents(); }
+
+    function renderRecents() {
+        const recents = getRecents();
+        const section = document.getElementById('recent-section');
+        const tags = document.getElementById('recent-tags');
+        if (!recents.length) { section.classList.add('hidden'); return; }
+        section.classList.remove('hidden');
+        tags.innerHTML = recents.map(id => `
+            <button type="button" data-id="${escapeHtml(id)}" class="recent-tag-btn text-[10px] font-mono bg-slate-900 border border-slate-800 hover:border-blue-500/30 hover:text-blue-400 text-slate-400 px-3 py-1.5 rounded-lg transition">
+                <i class="fa-solid fa-fingerprint mr-1.5 text-[9px]"></i>${escapeHtml(id)}
+            </button>`).join('');
+        tags.querySelectorAll('.recent-tag-btn').forEach(btn => {
+            btn.addEventListener('click', () => quickTrack(btn.dataset.id));
+        });
+    }
+
+    function loadRecentSearchesSection() { renderRecents(); }
+
+    function quickTrack(id) {
+        setMode('single');
+        document.getElementById('single-input').value = id;
+        doSingleTrack();
+        window.scrollTo({ top: document.getElementById('results-section').offsetTop - 100, behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
