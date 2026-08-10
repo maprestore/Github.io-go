@@ -1,0 +1,8 @@
+{
+  "name": "github-io-go",
+  "version": "1.0.0",
+  "description": "LogiSwift - Global Freight Forwarding",
+  "scripts": {
+    "start": "echo 'Static site - no server needed'"
+  }
+}
