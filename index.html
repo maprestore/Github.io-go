@@ -38,13 +38,13 @@
       <div class="manifest-body">
         <div class="field-row">
           <label>SHIPMENT ID</label>
-          <input type="text" placeholder="e.g. CN-48213-XA" />
+          <input type="text" id="heroShipmentId" placeholder="e.g. CN-48213-XA" />
         </div>
         <div class="field-row">
           <label>CONSIGNEE NAME (OPTIONAL)</label>
-          <input type="text" placeholder="Full name on shipment" />
+          <input type="text" id="heroConsignee" placeholder="Full name on shipment" />
         </div>
-        <button class="manifest-submit">LOCATE SHIPMENT</button>
+        <button class="manifest-submit" onclick="goToTracking()">LOCATE SHIPMENT</button>
         <div class="manifest-foot">
           <span>No account required</span>
           <span class="mono">Form 07-T</span>
@@ -67,16 +67,17 @@
   <div class="wrap">
     <div class="section-head">
       <div class="kicker">SHIPMENT LIFECYCLE</div>
-      <h2>Six checkpoints, one continuous record</h2>
+      <h2>Seven checkpoints, one continuous record</h2>
       <p>Every consignment moves through the same fixed sequence. Nothing skips a step, and nothing gets updated twice.</p>
     </div>
-    <div class="stages">
+    <div class="stages" style="grid-template-columns:repeat(4,1fr);">
       <div class="stage"><div class="idx">01</div><h3>Manifest created</h3><p>Shipment logged with sender, receiver, and weight on file.</p></div>
       <div class="stage"><div class="idx">02</div><h3>Sorting hub allocation</h3><p>Assigned to a hub for consolidation and onward routing.</p></div>
       <div class="stage"><div class="idx">03</div><h3>Customs clearing</h3><p>Documentation reviewed and cleared for border crossing.</p></div>
       <div class="stage"><div class="idx">04</div><h3>In transit</h3><p>Moving between hubs on its route to destination.</p></div>
-      <div class="stage"><div class="idx">05</div><h3>Out for delivery</h3><p>Loaded for final-mile delivery to the consignee.</p></div>
-      <div class="stage"><div class="idx">06</div><h3>Delivered</h3><p>Confirmed received. Record closed and archived.</p></div>
+      <div class="stage"><div class="idx">05</div><h3>Port of discharge checkpoint</h3><p>Unloaded and verified at the destination port.</p></div>
+      <div class="stage"><div class="idx">06</div><h3>Out for delivery</h3><p>Loaded for final-mile delivery to the consignee.</p></div>
+      <div class="stage"><div class="idx">07</div><h3>Delivered</h3><p>Confirmed received. Record closed and archived.</p></div>
     </div>
   </div>
 </section>
@@ -124,6 +125,17 @@
   </div>
 </footer>
 
-<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+function goToTracking(){
+  const id = document.getElementById('heroShipmentId').value.trim();
+  const name = document.getElementById('heroConsignee').value.trim();
+  const params = new URLSearchParams();
+  if(id) params.set('id', id);
+  if(name) params.set('name', name);
+  window.location.href = 'tracking.html' + (params.toString() ? ('?' + params.toString()) : '');
+}
+document.getElementById('heroShipmentId').addEventListener('keydown', e => { if(e.key === 'Enter') goToTracking(); });
+</script>
 </body>
 </html>

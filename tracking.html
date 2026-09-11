@@ -7,8 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="assets/config.js"></script>
 <style>
   .track-wrap{max-width:760px;margin:0 auto;padding:56px 28px 90px;}
+  .loading{padding:40px;text-align:center;color:var(--steel-soft);font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .error-box{padding:30px 26px;border:1px solid var(--manifest-line);background:var(--white);color:var(--steel);}
+  .error-box strong{color:var(--ink);display:block;margin-bottom:6px;font-family:'Oswald',sans-serif;font-size:17px;}
   .track-search{
     display:flex;gap:10px;border:1px solid var(--manifest-line);
     background:var(--white);padding:8px;margin-bottom:36px;
@@ -86,11 +90,11 @@
 <div class="track-wrap">
 
   <div class="track-search">
-    <input type="text" id="trackInput" placeholder="Enter shipment ID, e.g. CN-48213-XA" value="CN-48213-XA">
-    <button onclick="renderRecord()">LOCATE</button>
+    <input type="text" id="trackInput" placeholder="Enter shipment ID, e.g. CN-48213-XA">
+    <button onclick="lookupShipment()">LOCATE</button>
   </div>
 
-  <div id="result"></div>
+  <div id="result"><div class="empty">Enter a shipment ID above to see its record.</div></div>
 </div>
 
 <footer>
@@ -102,41 +106,92 @@
 
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
+const API_BASE = window.CONSIGNMENT_CONFIG.apiBase;
 
-// Demo record — in production this calls the backend API (see server.js)
-// GET /api/shipments/:trackingId
-const demoStages = [
-  {name:"Manifest created", when:"Sep 04, 08:12", done:true, note:"Shipment logged, 1 parcel, 4.2kg"},
-  {name:"Sorting hub allocation", when:"Sep 04, 19:40", done:true, note:"Assigned to Lagos regional hub"},
-  {name:"Customs clearing", when:"Sep 06, 10:05", done:true, note:"Cleared, no inspection required"},
-  {name:"In transit", when:"Sep 07, 02:30", done:true, note:"Departed regional hub"},
-  {name:"Out for delivery", when:"Pending", done:false, note:"Awaiting local courier assignment"},
-  {name:"Delivered", when:"Pending", done:false, note:"Awaiting confirmation"},
+// Real backend sequence — must match SHIPMENT_STATUSES in server.js exactly.
+const STAGES = [
+  'Manifest Created',
+  'Sorting Hub Allocation',
+  'Customs Clearing Arrays',
+  'In Transit',
+  'Port of Discharge Checkpoint',
+  'Out for Delivery',
+  'Delivered'
 ];
+const STAGE_LABELS = {
+  'Manifest Created': 'Manifest created',
+  'Sorting Hub Allocation': 'Sorting hub allocation',
+  'Customs Clearing Arrays': 'Customs clearing',
+  'In Transit': 'In transit',
+  'Port of Discharge Checkpoint': 'Port of discharge checkpoint',
+  'Out for Delivery': 'Out for delivery',
+  'Delivered': 'Delivered'
+};
 
-function renderRecord(){
-  const id = document.getElementById('trackInput').value.trim();
+function fmtDate(iso){
+  if(!iso) return 'Pending';
+  const d = new Date(iso);
+  if(isNaN(d)) return 'Pending';
+  return d.toLocaleDateString('en-US',{month:'short',day:'2-digit'}) + ', ' +
+         d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+function buildTimeline(shipment){
+  const currentIdx = STAGES.indexOf(shipment.status);
+  return STAGES.map((stage, i) => {
+    const done = currentIdx >= 0 && i <= currentIdx;
+    const isCurrent = i === currentIdx;
+    return {
+      name: STAGE_LABELS[stage],
+      done,
+      when: done ? (isCurrent ? fmtDate(shipment.updated_at || shipment.created_at) : '—') : 'Pending',
+      note: isCurrent ? (shipment.notes || shipment.location || 'Current stage') : (done ? 'Completed' : 'Awaiting this stage')
+    };
+  });
+}
+
+async function lookupShipment(){
+  const raw = document.getElementById('trackInput').value.trim();
   const result = document.getElementById('result');
-  if(!id){
+  if(!raw){
     result.innerHTML = '<div class="empty">Enter a shipment ID above to see its record.</div>';
     return;
   }
+  result.innerHTML = '<div class="loading">LOOKING UP RECORD…</div>';
+  try {
+    const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(raw)}`);
+    if (r.status === 404) {
+      result.innerHTML = `<div class="error-box"><strong>No record found</strong>No shipment matches "${raw.toUpperCase()}". Double-check the ID and try again.</div>`;
+      return;
+    }
+    if (!r.ok) throw new Error('Lookup failed');
+    const shipment = await r.json();
+    renderRecord(shipment);
+  } catch (err) {
+    result.innerHTML = `<div class="error-box"><strong>Tracking is temporarily unavailable</strong>Please try again in a moment.</div>`;
+  }
+}
+
+function renderRecord(shipment){
+  const result = document.getElementById('result');
+  const stages = buildTimeline(shipment);
+  const currentIdx = STAGES.indexOf(shipment.status);
   result.innerHTML = `
     <div class="record">
       <div class="record-head">
         <div>
-          <div class="id mono">${id.toUpperCase()}</div>
-          <h1>In transit</h1>
+          <div class="id mono">${shipment.shipmentId}</div>
+          <h1>${STAGE_LABELS[shipment.status] || shipment.status}</h1>
         </div>
-        <span class="status-pill">STAGE 4 OF 6</span>
+        <span class="status-pill">STAGE ${currentIdx + 1} OF ${STAGES.length}</span>
       </div>
       <div class="record-meta">
-        <div><label>ORIGIN</label><span>Lagos, NG</span></div>
-        <div><label>DESTINATION</label><span>Accra, GH</span></div>
-        <div><label>EST. ARRIVAL</label><span>Sep 09</span></div>
+        <div><label>SENDER</label><span>${shipment.sender || '—'}</span></div>
+        <div><label>RECEIVER</label><span>${shipment.receiver || '—'}</span></div>
+        <div><label>EST. ARRIVAL</label><span>${shipment.eta || 'Not set'}</span></div>
       </div>
       <div class="timeline">
-        ${demoStages.map(s => `
+        ${stages.map(s => `
           <div class="t-item ${s.done ? 'done':''}">
             <div class="when">${s.when}</div>
             <div class="rail"><div class="dot"></div><div class="line"></div></div>
@@ -150,7 +205,16 @@ function renderRecord(){
     </div>
   `;
 }
-renderRecord();
+
+// Pre-fill from homepage search (?id=...) if present
+(function initFromQuery(){
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if(id){
+    document.getElementById('trackInput').value = id;
+    lookupShipment();
+  }
+})();
 </script>
 </body>
 </html>

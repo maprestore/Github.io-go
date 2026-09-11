@@ -7,7 +7,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="assets/config.js"></script>
 <style>
+  .login-shell{max-width:380px;margin:80px auto;padding:0 28px;}
+  .login-card{border:1px solid var(--manifest-line);background:var(--white);}
+  .login-card::before{
+    content:"OPERATOR ACCESS";display:block;background:var(--ink);color:var(--manifest);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;padding:10px 18px;
+  }
+  .login-body{padding:26px;}
+  .login-body label{display:block;font-size:12px;color:var(--steel-soft);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;}
+  .login-body input{width:100%;padding:12px;border:1px solid var(--manifest-line);font-family:'IBM Plex Mono',monospace;font-size:15px;background:var(--manifest);margin-bottom:16px;}
+  .login-body button{width:100%;padding:13px;background:var(--orange);color:var(--white);border:none;font-size:14px;font-weight:600;cursor:pointer;}
+  .login-error{color:#B3261E;font-size:13px;margin-top:12px;font-family:'IBM Plex Mono',monospace;}
   .admin-shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 65px);}
   .side{border-right:1px solid var(--manifest-line);padding:26px 0;}
   .side a{
@@ -53,81 +65,189 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
-    <div style="font-size:13px;color:var(--steel);font-family:'IBM Plex Mono',monospace;">OPERATOR: A.OKAFOR</div>
+    <div id="operatorTag" style="font-size:13px;color:var(--steel);font-family:'IBM Plex Mono',monospace;"></div>
   </div>
 </div>
 
-<div class="admin-shell">
+<!-- Login gate -->
+<div class="login-shell" id="loginShell">
+  <div class="login-card">
+    <div class="login-body">
+      <label>ADMIN PASSKEY</label>
+      <input type="password" id="loginPassword" placeholder="Enter admin key">
+      <button onclick="doLogin()">SIGN IN</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard (hidden until authenticated) -->
+<div class="admin-shell" id="dashboardShell" style="display:none;">
   <aside class="side">
     <a href="#" class="active">Shipments</a>
-    <a href="#">Create shipment</a>
-    <a href="#">Export records</a>
-    <a href="#">Settings</a>
     <a href="index.html" style="margin-top:20px;border-top:1px solid var(--manifest-line);padding-top:18px;">← Back to site</a>
+    <a href="#" onclick="doLogout();return false;">Sign out</a>
   </aside>
 
   <main class="main">
     <div class="main-head">
       <h1>Shipment ledger</h1>
       <div class="toolbar">
-        <input type="text" placeholder="Search shipment ID or name">
-        <button class="btn">+ New shipment</button>
+        <input type="text" id="searchInput" placeholder="Search shipment ID or name">
+        <button class="btn" onclick="loadShipments()">Search</button>
         <button class="btn btn-outline" onclick="exportCSV()">Export CSV</button>
       </div>
     </div>
 
-    <div class="kpis">
-      <div class="kpi"><div class="n">128</div><div class="l">Total shipments on file</div></div>
-      <div class="kpi"><div class="n">34</div><div class="l">In transit</div></div>
-      <div class="kpi"><div class="n">89</div><div class="l">Delivered</div></div>
-      <div class="kpi"><div class="n">5</div><div class="l">Pending customs</div></div>
+    <div class="kpis" id="kpis">
+      <div class="kpi"><div class="n">—</div><div class="l">Total shipments on file</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">In transit</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">Delivered</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">Pending</div></div>
     </div>
 
     <table id="ledger">
       <thead>
         <tr>
           <th>Shipment ID</th>
-          <th>Consignee</th>
-          <th>Route</th>
+          <th>Sender → Receiver</th>
+          <th>Location</th>
           <th>Stage</th>
           <th>Updated</th>
-          <th></th>
         </tr>
       </thead>
-      <tbody id="ledgerBody"></tbody>
+      <tbody id="ledgerBody">
+        <tr><td colspan="5" style="text-align:center;color:var(--steel-soft);padding:30px;">Loading…</td></tr>
+      </tbody>
     </table>
   </main>
 </div>
 
 <script>
-const rows = [
-  {id:"CN-48213-XA", name:"Amara Chukwu", route:"Lagos → Accra", stage:"In transit", cls:"transit", updated:"Sep 07"},
-  {id:"CN-48190-KL", name:"David Mensah", route:"Lagos → Nairobi", stage:"Delivered", cls:"delivered", updated:"Sep 06"},
-  {id:"CN-48177-QT", name:"Fatima Bello", route:"Accra → Lagos", stage:"Customs clearing", cls:"pending", updated:"Sep 06"},
-  {id:"CN-48160-ZY", name:"Kwame Owusu", route:"Lagos → Kumasi", stage:"In transit", cls:"transit", updated:"Sep 05"},
-  {id:"CN-48145-MN", name:"Ngozi Eze", route:"Nairobi → Lagos", stage:"Delivered", cls:"delivered", updated:"Sep 04"},
-];
+const API_BASE = window.CONSIGNMENT_CONFIG.apiBase;
+let currentRows = [];
 
-const body = document.getElementById('ledgerBody');
-body.innerHTML = rows.map(r => `
-  <tr>
-    <td class="id-cell">${r.id}</td>
-    <td>${r.name}</td>
-    <td>${r.route}</td>
-    <td><span class="pill ${r.cls}">${r.stage.toUpperCase()}</span></td>
-    <td>${r.updated}</td>
-    <td class="row-actions"><a href="#">Edit</a><a href="#">View</a></td>
-  </tr>
-`).join('');
+const STAGE_CLASS = {
+  'Delivered': 'delivered',
+  'In Transit': 'transit',
+  'Out for Delivery': 'transit',
+};
+function stageClass(status){ return STAGE_CLASS[status] || 'pending'; }
+
+function getToken(){ return sessionStorage.getItem('admin_token'); }
+function setToken(t){ sessionStorage.setItem('admin_token', t); }
+function clearToken(){ sessionStorage.removeItem('admin_token'); }
+
+function showDashboard(){
+  document.getElementById('loginShell').style.display = 'none';
+  document.getElementById('dashboardShell').style.display = 'grid';
+  document.getElementById('operatorTag').textContent = 'SESSION ACTIVE';
+  loadShipments();
+  loadStats();
+}
+function showLogin(){
+  document.getElementById('loginShell').style.display = 'block';
+  document.getElementById('dashboardShell').style.display = 'none';
+  document.getElementById('operatorTag').textContent = '';
+}
+
+async function doLogin(){
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  try {
+    const r = await fetch(`${API_BASE}/admin/verify`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ password })
+    });
+    const data = await r.json();
+    if (data.success) {
+      setToken(data.token);
+      showDashboard();
+    } else {
+      errEl.textContent = data.message || 'Invalid passkey.';
+    }
+  } catch (e) {
+    errEl.textContent = 'Could not reach the server. Try again.';
+  }
+}
+
+async function doLogout(){
+  const token = getToken();
+  if (token) fetch(`${API_BASE}/admin/logout`, { method:'POST', headers:{'x-admin-token':token} }).catch(()=>{});
+  clearToken();
+  showLogin();
+}
+
+async function loadStats(){
+  try {
+    const r = await fetch(`${API_BASE}/stats`);
+    if (!r.ok) return;
+    const s = await r.json();
+    const kpis = document.getElementById('kpis');
+    kpis.innerHTML = `
+      <div class="kpi"><div class="n">${s.total}</div><div class="l">Total shipments on file</div></div>
+      <div class="kpi"><div class="n">${s.inTransit}</div><div class="l">In transit</div></div>
+      <div class="kpi"><div class="n">${s.delivered}</div><div class="l">Delivered</div></div>
+      <div class="kpi"><div class="n">${s.pending}</div><div class="l">Pending</div></div>
+    `;
+  } catch(e) { /* stats are non-critical */ }
+}
+
+async function loadShipments(){
+  const body = document.getElementById('ledgerBody');
+  const token = getToken();
+  const search = document.getElementById('searchInput').value.trim();
+  body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--steel-soft);padding:30px;">Loading…</td></tr>';
+  try {
+    let url = `${API_BASE}/shipments`;
+    if (search) url += `?search=${encodeURIComponent(search)}`;
+    const r = await fetch(url, { headers: token ? {'x-admin-token': token} : {} });
+    if (r.status === 401) { clearToken(); showLogin(); return; }
+    if (!r.ok) throw new Error('failed');
+    currentRows = await r.json();
+    renderRows();
+  } catch(e) {
+    body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--steel-soft);padding:30px;">Could not load shipments.</td></tr>';
+  }
+}
+
+function renderRows(){
+  const body = document.getElementById('ledgerBody');
+  if (!currentRows.length) {
+    body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--steel-soft);padding:30px;">No shipments on file yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = currentRows.map(r => `
+    <tr>
+      <td class="id-cell">${r.shipmentId}</td>
+      <td>${r.sender || '—'} → ${r.receiver || '—'}</td>
+      <td>${r.location || '—'}</td>
+      <td><span class="pill ${stageClass(r.status)}">${(r.status || '').toUpperCase()}</span></td>
+      <td>${r.created_at ? new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'2-digit'}) : '—'}</td>
+    </tr>
+  `).join('');
+}
 
 function exportCSV(){
-  const header = "Shipment ID,Consignee,Route,Stage,Updated\n";
-  const csv = header + rows.map(r => `${r.id},${r.name},${r.route},${r.stage},${r.updated}`).join("\n");
+  if (!currentRows.length) return;
+  const header = "Shipment ID,Sender,Receiver,Location,Status,Weight,Created\n";
+  const csv = header + currentRows.map(r =>
+    `${r.shipmentId},${r.sender},${r.receiver},${r.location},${r.status},${r.weight},${r.created_at || ''}`
+  ).join("\n");
   const blob = new Blob([csv], {type:"text/csv"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = "shipments.csv"; a.click();
 }
+
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+
+// On load: try existing session
+(function init(){
+  if (getToken()) { showDashboard(); } else { showLogin(); }
+})();
 </script>
 </body>
 </html>
