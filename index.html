@@ -523,6 +523,17 @@
     function escapeHtml(str) {
         return String(str ?? '').replace(/[&<>"']/g, ch => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[ch]));
     }
+    function safeImageUrl(url) {
+        try {
+            const parsed = new URL(String(url ?? ''), location.href);
+            return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+        } catch { return ''; }
+    }
+    function renderCargoImage(url, alt) {
+        const safe = safeImageUrl(url);
+        if (!safe) return `<div class="flex min-h-[120px] items-center justify-center gap-2 rounded-xl border border-dashed border-slate-800 bg-slate-950/60 px-4 text-center text-[10px] font-mono uppercase tracking-widest text-slate-600"><i class="fa-regular fa-image text-slate-700"></i><span>No cargo image available</span></div>`;
+        return `<a href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer" class="group relative block overflow-hidden rounded-xl border border-slate-800 bg-slate-950"><img src="${escapeHtml(safe)}" alt="${escapeHtml(alt)}" loading="lazy" class="h-36 w-full object-cover transition duration-300 group-hover:scale-[1.03] sm:h-40"><span class="absolute bottom-2 right-2 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-slate-950/85 px-2 py-1 text-[9px] font-bold uppercase tracking-widest text-slate-300 opacity-0 transition group-hover:opacity-100"><i class="fa-solid fa-expand text-[8px]"></i>Open image</span></a>`;
+    }
 
     // ── Static data ───────────────────────────────────────────
     const services = [
@@ -672,16 +683,24 @@
                 data = r.ok ? await r.json() : [];
             }
             if (!data.length) { results.innerHTML = `<div class="text-center py-6"><i class="fa-solid fa-inbox text-slate-700 text-xl mb-2"></i><p class="text-[10px] font-mono text-slate-600">No shipments matched that search.</p></div>`; return; }
-            results.innerHTML = data.map(item => `
-                <div class="bg-[#0e1422] border border-slate-800 rounded-xl p-3.5 hover:border-slate-700 transition">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-mono font-bold text-white text-xs">${escapeHtml(item.shipmentId)}</span>
-                        <span class="inline-flex items-center gap-1 text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded-full border ${STATUS_STYLE[item.status]||'bg-slate-800 text-slate-400 border-slate-700'}"><i class="fa-solid ${STAGE_ICONS[item.status]||'fa-box'} text-[7px]"></i>${escapeHtml(item.status)}</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 mb-0.5"><span class="text-slate-600">TO</span> &nbsp;${escapeHtml(item.receiver)}</p>
-                    <p class="text-[10px] text-slate-500"><span class="text-slate-600">AT</span> &nbsp;${escapeHtml(item.location)} <span class="text-slate-700">&bull;</span> ${escapeHtml(item.weight)} KG</p>
-                    <a href="tracking.html" data-sid="${escapeHtml(item.shipmentId)}" class="track-recent-link inline-flex items-center gap-1 text-[9px] text-blue-400 hover:text-blue-300 transition mt-2 font-mono">View full details <i class="fa-solid fa-arrow-right text-[8px]"></i></a>
-                </div>`).join('');
+            results.innerHTML = data.map(item => {
+                const imageUrl = safeImageUrl(item.imageUrl);
+                return `
+                 <div class="bg-[#0e1422] border border-slate-800 rounded-xl p-3.5 hover:border-slate-700 transition">
+                     <div class="grid grid-cols-[minmax(0,1fr)_64px] items-start gap-3">
+                         <div class="min-w-0">
+                             <div class="flex items-center justify-between gap-2 mb-2">
+                                 <span class="font-mono font-bold text-white text-xs truncate">${escapeHtml(item.shipmentId)}</span>
+                                 <span class="inline-flex items-center gap-1 text-[8px] font-mono font-black uppercase px-2 py-0.5 rounded-full border ${STATUS_STYLE[item.status]||'bg-slate-800 text-slate-400 border-slate-700'}"><i class="fa-solid ${STAGE_ICONS[item.status]||'fa-box'} text-[7px]"></i>${escapeHtml(item.status)}</span>
+                             </div>
+                             <p class="text-[10px] text-slate-500 mb-0.5"><span class="text-slate-600">TO</span> &nbsp;${escapeHtml(item.receiver)}</p>
+                             <p class="text-[10px] text-slate-500"><span class="text-slate-600">AT</span> &nbsp;${escapeHtml(item.location)} <span class="text-slate-700">&bull;</span> ${escapeHtml(item.weight)} KG</p>
+                         </div>
+                         ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="Cargo image for ${escapeHtml(item.shipmentId)}" loading="lazy" class="h-16 w-16 rounded-lg border border-slate-800 object-cover">` : `<div class="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed border-slate-800 text-slate-700"><i class="fa-regular fa-image text-xs"></i></div>`}
+                     </div>
+                     <a href="tracking.html?id=${encodeURIComponent(item.shipmentId)}" data-sid="${escapeHtml(item.shipmentId)}" class="track-recent-link inline-flex items-center gap-1 text-[9px] text-blue-400 hover:text-blue-300 transition mt-2 font-mono">View full details <i class="fa-solid fa-arrow-right text-[8px]"></i></a>
+                 </div>`;
+            }).join('');
             results.querySelectorAll('.track-recent-link').forEach(a => {
                 a.addEventListener('click', () => {
                     const sid = a.dataset.sid;
@@ -764,12 +783,24 @@
 
                 <!-- Route info -->
                  <div class="px-5 py-4 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-slate-900 text-xs">
-                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Location</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-location-dot text-blue-500/60 mr-1"></i>${escapeHtml(rec.location)}</span></div>
-                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">ETA</span><span class="text-slate-300 font-medium"><i class="fa-regular fa-clock text-blue-500/60 mr-1"></i>${escapeHtml(rec.eta||'TBC')}</span></div>
-                    <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Weight</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-weight-hanging text-blue-500/60 mr-1"></i>${escapeHtml(rec.weight)} KG</span></div>
-                </div>
+                     <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Location</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-location-dot text-blue-500/60 mr-1"></i>${escapeHtml(rec.location)}</span></div>
+                     <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">ETA</span><span class="text-slate-300 font-medium"><i class="fa-regular fa-clock text-blue-500/60 mr-1"></i>${escapeHtml(rec.eta||'TBC')}</span></div>
+                     <div><span class="text-[9px] font-mono text-slate-600 uppercase tracking-widest block mb-0.5">Weight</span><span class="text-slate-300 font-medium"><i class="fa-solid fa-weight-hanging text-blue-500/60 mr-1"></i>${escapeHtml(rec.weight)} KG</span></div>
+                 </div>
 
-                <a href="tracking.html" id="hero-view-timeline" class="flex items-center justify-center gap-2 border-t border-slate-900 text-blue-400 hover:text-blue-300 hover:bg-slate-900/60 text-[10px] font-bold uppercase tracking-widest py-3 transition">
+                 <div class="grid grid-cols-1 gap-4 border-t border-slate-900 p-5 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-start">
+                     <div class="rounded-xl border border-slate-800/80 bg-slate-950/50 p-4">
+                         <div class="mb-2 flex items-center gap-2 text-[9px] font-mono font-bold uppercase tracking-widest text-slate-600"><i class="fa-solid fa-clipboard-list text-blue-500/60"></i>Shipment record</div>
+                         <div class="grid grid-cols-2 gap-3 text-xs">
+                             <div><span class="block text-[9px] font-mono uppercase tracking-widest text-slate-600">Sender</span><span class="mt-1 block truncate text-slate-300">${escapeHtml(rec.sender)}</span></div>
+                             <div><span class="block text-[9px] font-mono uppercase tracking-widest text-slate-600">Receiver</span><span class="mt-1 block truncate text-slate-300">${escapeHtml(rec.receiver)}</span></div>
+                         </div>
+                         ${rec.notes ? `<div class="mt-4 border-t border-slate-800 pt-3"><span class="block text-[9px] font-mono uppercase tracking-widest text-slate-600">Operator note</span><span class="mt-1 block text-xs leading-relaxed text-slate-400">${escapeHtml(rec.notes)}</span></div>` : ''}
+                     </div>
+                     ${renderCargoImage(rec.imageUrl, `Cargo image for ${rec.shipmentId}`)}
+                 </div>
+
+                 <a href="tracking.html?id=${encodeURIComponent(rec.shipmentId)}" id="hero-view-timeline" class="flex items-center justify-center gap-2 border-t border-slate-900 text-blue-400 hover:text-blue-300 hover:bg-slate-900/60 text-[10px] font-bold uppercase tracking-widest py-3 transition">
                     View full timeline & carrier notes <i class="fa-solid fa-arrow-right text-[9px]"></i>
                 </a>
             </div>`;
