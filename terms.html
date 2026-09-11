@@ -1,37 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service | LogiSwift</title>
-    <meta name="description" content="LogiSwift terms of service.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/site.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms — Consignment Ops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .page{max-width:680px;margin:0 auto;padding:60px 28px 90px;}
+  .page .kicker{color:var(--orange);font-size:13px;font-family:'IBM Plex Mono',monospace;margin-bottom:14px;}
+  .page h1{font-size:32px;}
+  .page .updated{font-size:13px;color:var(--steel-soft);margin-top:10px;font-family:'IBM Plex Mono',monospace;}
+  .page section{margin-top:34px;padding-top:28px;border-top:1px solid var(--manifest-line);}
+  .page h2{font-size:18px;margin-bottom:12px;}
+  .page p{color:var(--steel);font-size:15px;}
+  .page p + p{margin-top:12px;}
+  .page ul{color:var(--steel);font-size:15px;padding-left:20px;}
+  .page li{margin-bottom:8px;}
+</style>
 </head>
-<body class="bg-[#0b0f19] text-slate-300 antialiased">
-    <a class="skip-link" href="#main-content">Skip to content</a>
-    <nav class="bg-[#0b0f19]/90 backdrop-blur-xl sticky top-0 z-40 border-b border-slate-800/50">
-        <div class="max-w-5xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3.5" aria-label="LogiSwift home">
-                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-compass text-white"></i></div>
-                <div><span class="text-xl font-extrabold tracking-tight text-white block leading-none">LogiSwift</span><span class="text-[9px] text-slate-500 tracking-widest uppercase mt-1 block font-semibold">Global Transits</span></div>
-            </a>
-            <a href="index.html" class="text-xs font-bold uppercase tracking-wider text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i>Back home</a>
-        </div>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
+    <nav class="nav">
+      <a href="index.html#pipeline">Shipment stages</a>
+      <a href="about.html">About</a>
+      <a href="tracking.html">Track a shipment</a>
     </nav>
-    <main id="main-content" class="max-w-3xl mx-auto px-4 sm:px-8 py-16 sm:py-24">
-        <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest">Legal</span>
-        <h1 class="text-3xl sm:text-5xl font-black text-white mt-3 mb-5">Terms of Service</h1>
-        <p class="text-slate-500 text-xs font-mono mb-10">Last updated: June 2026</p>
-        <div class="space-y-8 text-sm leading-7 text-slate-400">
-            <section><h2 class="text-white font-bold text-lg mb-2">Using LogiSwift</h2><p>LogiSwift provides freight coordination, shipment visibility, and related information services. Tracking data and calculator results are operational estimates unless confirmed in a written quote or service agreement.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Customer responsibilities</h2><p>Customers must provide accurate cargo, routing, customs, and contact information; comply with applicable laws; and avoid sending prohibited or unsafe materials through the network.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Quotes and availability</h2><p>Rates, transit times, carrier availability, and delivery dates can change because of capacity, customs, weather, security, or other events outside our control. A formal quote governs when one has been issued.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Acceptable use</h2><p>Do not misuse the tracking or administration interfaces, attempt unauthorised access, submit malicious content, or interfere with service availability. We may suspend access to protect customers and operations.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Contact</h2><p>Questions about these terms can be sent to <a class="text-blue-400 hover:text-blue-300 underline" href="mailto:support@logiswift.delivery">support@logiswift.delivery</a>.</p></section>
-        </div>
-    </main>
-    <footer class="border-t border-slate-900 py-8 px-4 text-center text-[11px] text-slate-600">&copy; 2026 LogiSwift Systems Collective.</footer>
+    <a href="admin.html" class="btn btn-outline">Operator sign in</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="kicker">TERMS OF SERVICE</div>
+  <h1>Terms</h1>
+  <div class="updated">Last updated: <span id="dt"></span></div>
+
+  <section>
+    <h2>Use of the tracking service</h2>
+    <p>The public shipment tracking page is provided for the purpose of checking the status of a shipment associated with a valid shipment ID or consignee name. Automated scraping or bulk lookup of shipment records is not permitted.</p>
+  </section>
+
+  <section>
+    <h2>Operator accounts</h2>
+    <p>Operators are responsible for the accuracy of shipment records they create and update, and for maintaining the security of their dashboard credentials.</p>
+  </section>
+
+  <section>
+    <h2>Accuracy of information</h2>
+    <p>Shipment status reflects the most recent update entered by an operator. While we aim for accuracy, estimated arrival dates and stage timing are estimates, not guarantees.</p>
+  </section>
+
+  <section>
+    <h2>Limitation of liability</h2>
+    <p>This platform provides a tracking and record-keeping service. It is not a carrier and is not liable for delays, loss, or damage to physical shipments — those matters are governed by the terms of the carrier or freight forwarder handling the shipment.</p>
+  </section>
+
+  <section>
+    <h2>Changes to these terms</h2>
+    <p>These terms may be updated from time to time. Continued use of the tracking service after changes are posted constitutes acceptance of the revised terms.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© <span id="yr"></span> Consignment Ops</span>
+    <span><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></span>
+  </div>
+</footer>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('dt').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+</script>
 </body>
 </html>

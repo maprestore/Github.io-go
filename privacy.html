@@ -1,37 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy | LogiSwift</title>
-    <meta name="description" content="LogiSwift privacy policy and data handling summary.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/site.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy — Consignment Ops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .page{max-width:680px;margin:0 auto;padding:60px 28px 90px;}
+  .page .kicker{color:var(--orange);font-size:13px;font-family:'IBM Plex Mono',monospace;margin-bottom:14px;}
+  .page h1{font-size:32px;}
+  .page .updated{font-size:13px;color:var(--steel-soft);margin-top:10px;font-family:'IBM Plex Mono',monospace;}
+  .page section{margin-top:34px;padding-top:28px;border-top:1px solid var(--manifest-line);}
+  .page h2{font-size:18px;margin-bottom:12px;}
+  .page p{color:var(--steel);font-size:15px;}
+  .page p + p{margin-top:12px;}
+  .page ul{color:var(--steel);font-size:15px;padding-left:20px;}
+  .page li{margin-bottom:8px;}
+</style>
 </head>
-<body class="bg-[#0b0f19] text-slate-300 antialiased">
-    <a class="skip-link" href="#main-content">Skip to content</a>
-    <nav class="bg-[#0b0f19]/90 backdrop-blur-xl sticky top-0 z-40 border-b border-slate-800/50">
-        <div class="max-w-5xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3.5" aria-label="LogiSwift home">
-                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center"><i class="fa-solid fa-compass text-white"></i></div>
-                <div><span class="text-xl font-extrabold tracking-tight text-white block leading-none">LogiSwift</span><span class="text-[9px] text-slate-500 tracking-widest uppercase mt-1 block font-semibold">Global Transits</span></div>
-            </a>
-            <a href="index.html" class="text-xs font-bold uppercase tracking-wider text-blue-400 hover:text-blue-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i>Back home</a>
-        </div>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
+    <nav class="nav">
+      <a href="index.html#pipeline">Shipment stages</a>
+      <a href="about.html">About</a>
+      <a href="tracking.html">Track a shipment</a>
     </nav>
-    <main id="main-content" class="max-w-3xl mx-auto px-4 sm:px-8 py-16 sm:py-24">
-        <span class="text-blue-400 font-bold uppercase text-[10px] tracking-widest">Legal</span>
-        <h1 class="text-3xl sm:text-5xl font-black text-white mt-3 mb-5">Privacy Policy</h1>
-        <p class="text-slate-500 text-xs font-mono mb-10">Last updated: June 2026</p>
-        <div class="space-y-8 text-sm leading-7 text-slate-400">
-            <section><h2 class="text-white font-bold text-lg mb-2">What we collect</h2><p>When you request a quote, contact our routing desk, subscribe to updates, or use shipment tracking, we may process the information you submit and technical data needed to keep the service secure.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">How we use it</h2><p>We use information to provide logistics services, respond to enquiries, operate shipment visibility tools, improve reliability, and meet legal or customs obligations. We do not sell personal information.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Retention and security</h2><p>Shipment and enquiry records are retained only for operational, accounting, and compliance needs. Access is restricted to authorised team members and protected with session controls, transport encryption, and service-provider safeguards.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Your choices</h2><p>You may ask us to access, correct, or delete personal information where applicable. Email <a class="text-blue-400 hover:text-blue-300 underline" href="mailto:support@logiswift.delivery">support@logiswift.delivery</a> with the subject “Privacy request”.</p></section>
-            <section><h2 class="text-white font-bold text-lg mb-2">Cookies</h2><p>LogiSwift uses essential browser storage for preferences such as recent shipment searches and cookie consent. Optional analytics or marketing cookies should only be enabled with your consent.</p></section>
-        </div>
-    </main>
-    <footer class="border-t border-slate-900 py-8 px-4 text-center text-[11px] text-slate-600">&copy; 2026 LogiSwift Systems Collective.</footer>
+    <a href="admin.html" class="btn btn-outline">Operator sign in</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="kicker">PRIVACY POLICY</div>
+  <h1>Privacy</h1>
+  <div class="updated">Last updated: <span id="dt"></span></div>
+
+  <section>
+    <h2>What we collect</h2>
+    <p>To provide shipment tracking, we store the information needed to create and update a shipment record: sender and consignee names, origin and destination, shipment status, and timestamps for each stage of the delivery lifecycle.</p>
+    <p>Looking up a shipment on the public tracking page does not require an account and does not collect personal information beyond the shipment ID or name entered for the search.</p>
+  </section>
+
+  <section>
+    <h2>How it's used</h2>
+    <ul>
+      <li>To display shipment status to the person tracking it</li>
+      <li>To let operators manage and update shipment records</li>
+      <li>To generate CSV exports for the operator's own recordkeeping</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>What we don't do</h2>
+    <p>We do not sell shipment or consignee data to third parties, and we do not use tracking data for advertising purposes.</p>
+  </section>
+
+  <section>
+    <h2>Data retention</h2>
+    <p>Shipment records are retained for as long as the operator's account remains active, or as required for operational and recordkeeping purposes.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>Questions about this policy can be directed to the operator managing your shipment.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© <span id="yr"></span> Consignment Ops</span>
+    <span><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></span>
+  </div>
+</footer>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('dt').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+</script>
 </body>
 </html>

@@ -1,0 +1,191 @@
+  :root{
+    --ink:#171A1C;
+    --steel:#41505B;
+    --steel-soft:#6B7882;
+    --orange:#E8570C;
+    --manifest:#EDEAE0;
+    --manifest-line:#D7D2C4;
+    --green:#2F6F4E;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--manifest);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    margin:0;
+    letter-spacing:0.2px;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+
+  /* ---- Top bar ---- */
+  .topbar{
+    border-bottom:1px solid var(--manifest-line);
+    background:var(--manifest);
+  }
+  .topbar-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 28px;max-width:1100px;margin:0 auto;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Oswald',sans-serif;font-weight:700;font-size:19px;
+    letter-spacing:0.5px;
+  }
+  .brand .mark{
+    width:26px;height:26px;background:var(--orange);
+    display:inline-block;position:relative;flex:none;
+  }
+  .brand .mark::after{
+    content:"";position:absolute;inset:5px;border:2px solid var(--manifest);
+  }
+  .nav{display:flex;gap:28px;font-size:15px;color:var(--steel);}
+  .nav a{text-decoration:none;margin-right:28px;}
+  .nav a:last-child{margin-right:0;}
+  .nav a:hover{color:var(--ink);}
+  .btn{
+    display:inline-block;padding:11px 20px;
+    background:var(--ink);color:var(--manifest);
+    text-decoration:none;font-size:14px;font-weight:500;
+    border:1px solid var(--ink);
+  }
+  .btn:hover{background:var(--orange);border-color:var(--orange);color:var(--white);}
+  .btn-outline{
+    background:transparent;color:var(--ink);border:1px solid var(--ink);
+  }
+  .btn-outline:hover{background:var(--ink);color:var(--manifest);}
+
+  /* ---- Hero: styled as a manifest form ---- */
+  .hero{padding:64px 0 40px;}
+  .hero-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:56px;align-items:start;
+  }
+  .eyebrow-line{
+    display:flex;align-items:center;gap:10px;color:var(--steel);
+    font-size:13px;margin-bottom:22px;
+  }
+  .eyebrow-line .num{color:var(--orange);font-weight:600;}
+  .hero h1{
+    font-size:52px;line-height:1.05;color:var(--ink);
+    max-width:520px;
+  }
+  .hero p.lede{
+    margin-top:22px;font-size:17px;color:var(--steel);max-width:460px;
+  }
+  .hero-actions{margin-top:30px;display:flex;gap:14px;}
+
+  /* Manifest card: the tracking lookup, styled like a form document */
+  .manifest-card{
+    background:var(--white);
+    border:1px solid var(--manifest-line);
+    position:relative;
+  }
+  .manifest-card::before{
+    content:"TRACKING DECLARATION";
+    display:block;
+    background:var(--ink);color:var(--manifest);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;letter-spacing:1.5px;
+    padding:10px 18px;
+  }
+  .manifest-body{padding:26px 26px 28px;}
+  .field-row{margin-bottom:18px;}
+  .field-row label{
+    display:block;font-size:12px;color:var(--steel-soft);
+    margin-bottom:6px;font-family:'IBM Plex Mono',monospace;
+  }
+  .field-row input{
+    width:100%;padding:12px 12px;border:1px solid var(--manifest-line);
+    font-family:'IBM Plex Mono',monospace;font-size:15px;
+    background:var(--manifest);
+  }
+  .field-row input:focus{outline:2px solid var(--orange);outline-offset:1px;}
+  .manifest-submit{
+    width:100%;padding:13px;background:var(--orange);color:var(--white);
+    border:none;font-size:14px;font-weight:600;cursor:pointer;
+    letter-spacing:0.4px;
+  }
+  .manifest-submit:hover{background:#c94800;}
+  .manifest-foot{
+    display:flex;justify-content:space-between;margin-top:16px;
+    font-size:12.5px;color:var(--steel-soft);
+  }
+
+  /* ---- Stats strip ---- */
+  .stats{
+    border-top:1px solid var(--manifest-line);
+    border-bottom:1px solid var(--manifest-line);
+    padding:26px 0;margin-top:56px;
+  }
+  .stats-row{display:flex;gap:0;}
+  .stat{flex:1;padding:0 24px;border-left:1px solid var(--manifest-line);}
+  .stat:first-child{border-left:none;padding-left:0;}
+  .stat .n{font-family:'Oswald',sans-serif;font-size:30px;color:var(--ink);}
+  .stat .l{font-size:13px;color:var(--steel);margin-top:4px;}
+
+  /* ---- Status pipeline (real sequence -> numbered is justified) ---- */
+  .pipeline{padding:80px 0;}
+  .section-head{max-width:560px;margin-bottom:44px;}
+  .section-head .kicker{color:var(--orange);font-size:13px;font-family:'IBM Plex Mono',monospace;margin-bottom:10px;}
+  .section-head h2{font-size:32px;color:var(--ink);}
+  .section-head p{color:var(--steel);margin-top:12px;font-size:15.5px;}
+
+  .stages{
+    display:grid;grid-template-columns:repeat(6,1fr);
+    border-top:1px solid var(--manifest-line);
+    border-left:1px solid var(--manifest-line);
+  }
+  .stage{
+    border-right:1px solid var(--manifest-line);
+    border-bottom:1px solid var(--manifest-line);
+    padding:20px 16px;background:var(--white);
+    min-height:150px;
+  }
+  .stage .idx{font-family:'IBM Plex Mono',monospace;color:var(--orange);font-size:13px;}
+  .stage h3{font-size:15px;margin-top:14px;line-height:1.3;color:var(--ink);}
+  .stage p{font-size:12.5px;color:var(--steel-soft);margin-top:8px;}
+
+  /* ---- Feature rows (asymmetric, not identical cards) ---- */
+  .features{padding:20px 0 80px;}
+  .feature-row{
+    display:grid;grid-template-columns:220px 1fr;gap:40px;
+    padding:30px 0;border-top:1px solid var(--manifest-line);
+  }
+  .feature-row:last-child{border-bottom:1px solid var(--manifest-line);}
+  .feature-row .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--steel-soft);
+    padding-top:4px;
+  }
+  .feature-row h3{font-size:22px;color:var(--ink);max-width:460px;}
+  .feature-row p{color:var(--steel);margin-top:10px;max-width:520px;font-size:15px;}
+
+  /* ---- CTA band ---- */
+  .cta-band{
+    background:var(--ink);color:var(--manifest);padding:64px 0;
+  }
+  .cta-inner{
+    display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;
+  }
+  .cta-inner h2{font-size:30px;color:var(--white);max-width:480px;}
+  .cta-inner p{color:#B9C0C4;margin-top:10px;max-width:420px;font-size:15px;}
+
+  footer{padding:34px 0;border-top:1px solid var(--manifest-line);}
+  .foot-row{display:flex;justify-content:space-between;color:var(--steel-soft);font-size:13px;flex-wrap:wrap;gap:12px;}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .stats-row{flex-wrap:wrap;}
+    .stat{flex:1 1 45%;border-left:none;border-top:1px solid var(--manifest-line);padding:16px 0 0;}
+    .stages{grid-template-columns:repeat(2,1fr);}
+    .feature-row{grid-template-columns:1fr;gap:10px;}
+    .hero h1{font-size:38px;}
+  }
