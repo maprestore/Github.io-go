@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Consignment Ops</title>
+<title>About LogiSwift | Freight visibility</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 <style>
   .page{max-width:720px;margin:0 auto;padding:60px 28px 90px;}
   .page .kicker{color:var(--orange);font-size:13px;font-family:'IBM Plex Mono',monospace;margin-bottom:14px;}
@@ -33,14 +33,15 @@
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
+    <a class="brand" href="/" aria-label="LogiSwift home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-copy"><span class="brand-name">LogiSwift</span><span class="brand-meta">Global freight visibility</span></span>
+    </a>
     <nav class="nav" id="site-nav" aria-label="Primary navigation">
-      <a href="index.html#pipeline">Shipment stages</a>
-      <a href="about.html">About</a>
-      <a href="tracking.html">Track a shipment</a>
-      <a href="admin.html" class="mobile-operator-link">Operator sign in</a>
+      <a href="/#pipeline">Shipment stages</a>
+      <a href="/about/">About</a>
+      <a href="/tracking/">Track a shipment</a>
     </nav>
-    <a href="admin.html" class="btn btn-outline header-action">Operator sign in</a>
     <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">
       <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
     </button>
@@ -48,13 +49,13 @@
 </div>
 
 <div class="page">
-  <div class="kicker">ABOUT THE PLATFORM</div>
+  <div class="kicker">ABOUT LOGISWIFT</div>
   <h1>Built for the question every shipment gets asked at least once.</h1>
-  <p class="lede">"Where is it right now?" Consignment Ops exists so that question has a fast, public answer — without a phone call, a support ticket, or a spreadsheet lookup.</p>
+  <p class="lede">"Where is it right now?" LogiSwift exists so that question has a fast, public answer — without a phone call, a support ticket, or a spreadsheet lookup.</p>
 
   <section>
     <h2>What this is</h2>
-    <p>Consignment Ops is a shipment tracking and operations record for freight forwarders, couriers, and logistics teams. Every shipment gets a fixed, seven-stage lifecycle — from manifest creation to final delivery — so status means the same thing to everyone looking at it: the customer, the operator, and the partner carrier.</p>
+     <p>LogiSwift is a shipment tracking and operations record for freight forwarders, couriers, and logistics teams. Every shipment gets a fixed, seven-stage lifecycle — from manifest creation to final delivery — so status means the same thing to everyone looking at it: the customer, the operator, and the partner carrier.</p>
     <p>There's a public lookup page for customers, and an operator dashboard for the team managing the actual freight. Both read from the same record, so there's never a mismatch between what a customer sees and what's actually true.</p>
   </section>
 
@@ -92,11 +93,11 @@
 
 <footer>
   <div class="wrap foot-row">
-    <span>© <span id="yr"></span> Consignment Ops</span>
-    <span><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></span>
+    <span>© <span id="yr"></span> LogiSwift Systems</span>
+    <span><a href="/privacy/">Privacy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></span>
   </div>
 </footer>
 <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
-<script src="site.js"></script>
+<script src="../site.js"></script>
 </body>
 </html>

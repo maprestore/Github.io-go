@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Track a shipment — Consignment Ops</title>
+<title>Track a shipment | LogiSwift</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script src="assets/config.js"></script>
+<link rel="stylesheet" href="../style.css">
+<script src="../assets/config.js"></script>
 <style>
   .track-wrap{max-width:820px;margin:0 auto;padding:clamp(34px,6vw,64px) 28px 90px;}
   .loading{padding:40px;text-align:center;color:var(--steel-soft);font-family:'IBM Plex Mono',monospace;font-size:13px;}
   .error-box{padding:30px 26px;border:1px solid var(--manifest-line);background:var(--white);color:var(--steel);}
   .error-box strong{color:var(--ink);display:block;margin-bottom:6px;font-family:'Oswald',sans-serif;font-size:17px;}
-  .track-search{
-    display:flex;gap:10px;border:1px solid var(--manifest-line);
-    background:var(--white);padding:8px;margin-bottom:36px;
+   .track-search{
+     display:flex;gap:10px;border:1px solid var(--manifest-line);border-radius:14px;
+     background:var(--white);padding:8px;margin-bottom:36px;box-shadow:0 12px 30px rgba(23,36,43,0.05);
   }
   .track-search input{
     flex:1;border:none;background:transparent;padding:10px 12px;
@@ -24,10 +24,11 @@
   .track-search input:focus{outline:none;}
   .track-search button{
     background:var(--orange);color:var(--white);border:none;
-    min-height:44px;padding:0 22px;font-weight:600;font-size:14px;cursor:pointer;
+     min-height:44px;padding:0 22px;border-radius:9px;font-weight:600;font-size:14px;cursor:pointer;
   }
   .record{
-    border:1px solid var(--manifest-line);background:var(--white);
+     border:1px solid var(--manifest-line);border-radius:16px;background:var(--white);overflow:hidden;
+     box-shadow:0 14px 34px rgba(23,36,43,0.05);
   }
   .record-head{
     display:flex;justify-content:space-between;align-items:flex-start;
@@ -93,14 +94,15 @@
 
 <div class="topbar">
   <div class="topbar-inner">
-    <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
+    <a class="brand" href="/" aria-label="LogiSwift home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-copy"><span class="brand-name">LogiSwift</span><span class="brand-meta">Global freight visibility</span></span>
+    </a>
     <nav class="nav" id="site-nav" aria-label="Primary navigation">
-      <a href="index.html#pipeline">Shipment stages</a>
-      <a href="about.html">About</a>
-      <a href="tracking.html">Track a shipment</a>
-      <a href="admin.html" class="mobile-operator-link">Operator sign in</a>
+      <a href="/#pipeline">Shipment stages</a>
+      <a href="/about/">About</a>
+      <a href="/tracking/">Track a shipment</a>
     </nav>
-    <a href="admin.html" class="btn btn-outline header-action">Operator sign in</a>
     <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">
       <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
     </button>
@@ -110,7 +112,7 @@
 <div class="track-wrap">
 
   <div class="track-search">
-    <input type="text" id="trackInput" placeholder="Enter shipment ID, e.g. CN-48213-XA" aria-label="Shipment ID" autocomplete="off">
+    <input type="text" id="trackInput" placeholder="Enter tracking ID, e.g. LS-48213-XA" aria-label="Shipment ID" autocomplete="off">
     <button type="button" onclick="lookupShipment()">LOCATE</button>
   </div>
 
@@ -119,8 +121,8 @@
 
 <footer>
   <div class="wrap foot-row">
-    <span>© <span id="yr"></span> Consignment Ops</span>
-    <span><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></span>
+    <span>© <span id="yr"></span> LogiSwift Systems</span>
+    <span><a href="/privacy/">Privacy</a> &nbsp;·&nbsp; <a href="/terms/">Terms</a></span>
   </div>
 </footer>
 
@@ -236,6 +238,6 @@ function renderRecord(shipment){
   }
 })();
 </script>
-<script src="site.js"></script>
+<script src="../site.js"></script>
 </body>
 </html>

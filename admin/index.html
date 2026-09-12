@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operator dashboard | LogiSwift</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<script src="../assets/config.js"></script>
+<style>
+  .login-shell{max-width:380px;margin:80px auto;padding:0 28px;}
+  .login-card{border:1px solid var(--manifest-line);border-radius:18px;background:var(--white);overflow:hidden;box-shadow:0 18px 46px rgba(16,42,67,0.08);}
+  .login-card::before{
+     content:"LOGISWIFT OPERATOR ACCESS";display:block;background:var(--ink);color:var(--manifest);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;padding:10px 18px;
+  }
+  .login-body{padding:26px;}
+  .login-body label{display:block;font-size:12px;color:var(--steel-soft);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;}
+   .login-body input{width:100%;padding:13px;border:1px solid var(--manifest-line);border-radius:10px;font-family:'IBM Plex Mono',monospace;font-size:15px;background:var(--manifest);margin-bottom:16px;}
+   .login-body button{width:100%;padding:13px;background:var(--orange);color:var(--white);border:none;border-radius:10px;min-height:46px;font-size:14px;font-weight:600;cursor:pointer;}
+  .login-error{color:#B3261E;font-size:13px;margin-top:12px;font-family:'IBM Plex Mono',monospace;}
+  .admin-shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 65px);min-width:0;}
+  .side{border-right:1px solid var(--manifest-line);padding:26px 0;background:rgba(255,255,255,0.28);}
+  .side a{
+    display:block;padding:11px 26px;color:var(--steel);text-decoration:none;
+    font-size:14px;border-left:3px solid transparent;
+  }
+  .side a.active{color:var(--ink);border-left-color:var(--orange);font-weight:600;background:var(--white);}
+   .main{padding:34px 38px 70px;min-width:0;}
+  .main-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;flex-wrap:wrap;gap:14px;}
+   .main-head h1{font-size:30px;line-height:1.05;}
+   .dashboard-kicker{font:11px 'IBM Plex Mono',monospace;color:var(--orange);letter-spacing:1.2px;margin-bottom:7px;}
+   .head-copy p{color:var(--steel);font-size:14px;margin:8px 0 0;}
+   .dashboard-actions{display:flex;align-items:center;gap:10px;}
+   .toolbar{display:flex;gap:10px;flex-wrap:wrap;}
+   .toolbar input{
+     padding:10px 12px;border:1px solid var(--manifest-line);border-radius:10px;
+     font-family:'IBM Plex Mono',monospace;font-size:13.5px;min-width:220px;background:var(--white);
+   }
+   .status-filter{padding:10px 12px;min-height:44px;border:1px solid var(--manifest-line);border-radius:10px;background:var(--white);color:var(--ink);font-size:13px;}
+   table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--manifest-line);}
+  thead th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+    color:var(--steel-soft);letter-spacing:0.4px;padding:12px 16px;
+    border-bottom:1px solid var(--manifest-line);background:var(--manifest);
+  }
+  tbody td{padding:14px 16px;border-bottom:1px solid var(--manifest-line);font-size:14px;}
+  tbody tr:last-child td{border-bottom:none;}
+   tbody tr:hover{background:#f5fafb;}
+  .id-cell{font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .pill{
+    display:inline-block;padding:4px 10px;font-size:11.5px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+   .pill.transit{background:#e3f2f4;color:var(--orange);}
+   .pill.delivered{background:#e4f4eb;color:var(--green);}
+   .pill.pending{background:#edf1f4;color:var(--steel);}
+   .row-actions{display:flex;gap:8px;}
+   .row-action{border:0;background:transparent;color:var(--steel);font-size:12px;cursor:pointer;padding:5px 0;text-decoration:underline;}
+   .row-action.delete{color:#b42318;}
+
+   .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0 28px;}
+   .kpi{border:1px solid var(--manifest-line);border-radius:14px;background:var(--white);padding:18px 20px;box-shadow:0 10px 24px rgba(16,42,67,0.04);}
+   .kpi .n{font-family:'Oswald',sans-serif;font-size:30px;}
+   .kpi .l{font-size:12.5px;color:var(--steel-soft);margin-top:4px;}
+   .kpi .meta{font:10px 'IBM Plex Mono',monospace;color:var(--orange);margin-top:12px;}
+   .table-scroll{overflow-x:auto;border:1px solid var(--manifest-line);border-radius:14px;background:var(--white);}
+   .table-scroll table{min-width:900px;border:0;}
+   .table-heading{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 0 12px;}
+   .table-heading h2{font-size:20px;}
+   .table-heading p{font-size:12px;color:var(--steel-soft);margin:4px 0 0;}
+   .system-status{font:11px 'IBM Plex Mono',monospace;color:var(--steel-soft);}
+   .system-status::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--steel-soft);margin-right:7px;}
+   .system-status.online{color:var(--green);}
+   .system-status.online::before{background:var(--green);}
+   .composer{border:1px solid var(--manifest-line);border-radius:16px;background:var(--white);padding:22px;margin:0 0 28px;box-shadow:0 12px 26px rgba(16,42,67,0.05);}
+   .composer[hidden]{display:none;}
+   .composer-head{display:flex;align-items:start;justify-content:space-between;gap:18px;margin-bottom:18px;}
+   .composer-head h2{font-size:20px;}
+   .composer-head p{font-size:13px;color:var(--steel);margin:5px 0 0;}
+   .composer-close{border:0;background:transparent;color:var(--steel);font-size:20px;cursor:pointer;line-height:1;}
+   .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+   .form-field{display:flex;flex-direction:column;gap:6px;}
+   .form-field.full{grid-column:1/-1;}
+   .form-field label{font:11px 'IBM Plex Mono',monospace;color:var(--steel-soft);letter-spacing:.7px;}
+   .form-field input,.form-field select,.form-field textarea{width:100%;border:1px solid var(--manifest-line);border-radius:9px;background:var(--manifest);padding:11px 12px;color:var(--ink);}
+   .form-field textarea{min-height:76px;resize:vertical;}
+   .composer-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+   .notice{min-height:20px;font-size:13px;margin-top:10px;color:var(--steel);}
+   .notice.success{color:var(--green);}
+   .notice.error{color:#b42318;}
+  @media (max-width:900px){
+    .admin-shell{grid-template-columns:1fr;min-height:0;}
+    .side{display:flex;align-items:center;gap:4px;padding:10px 18px;border-right:0;border-bottom:1px solid var(--manifest-line);overflow-x:auto;}
+    .side a{white-space:nowrap;padding:10px 12px;border-left:0;border-bottom:3px solid transparent;}
+    .side a.active{border-left:0;border-bottom-color:var(--orange);}
+    .side a[style]{margin-top:0!important;border-top:0!important;padding-top:10px!important;}
+    .main{padding:24px 18px 48px;}
+    .main-head{align-items:stretch;}
+    .dashboard-actions{width:100%;justify-content:space-between;}
+    .toolbar{width:100%;flex-wrap:wrap;}
+    .toolbar input{flex:1 1 100%;min-width:0;min-height:44px;}
+    .toolbar .btn{flex:1;}
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .form-grid{grid-template-columns:1fr;}
+    .form-field.full{grid-column:auto;}
+    .table-heading{align-items:flex-start;flex-direction:column;}
+  }
+  @media (max-width:520px){
+    .topbar-inner{padding:12px 18px;}
+    #operatorTag{font-size:11px!important;}
+    .login-shell{margin:46px auto;padding:0 18px;}
+    .login-body{padding:20px 18px;}
+    .main-head h1{font-size:22px;}
+    .toolbar{gap:8px;}
+    .toolbar .btn{padding-left:10px;padding-right:10px;font-size:12px;}
+    .kpis{grid-template-columns:1fr;gap:10px;}
+    .kpi{padding:14px 16px;}
+    .composer{padding:18px;}
+    .composer-actions{flex-direction:column-reverse;}
+    .composer-actions .btn{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/" aria-label="LogiSwift home">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-copy"><span class="brand-name">LogiSwift</span><span class="brand-meta">Operator workspace</span></span>
+    </a>
+    <div id="operatorTag" style="font-size:13px;color:var(--steel);font-family:'IBM Plex Mono',monospace;"></div>
+  </div>
+</div>
+
+<!-- Login gate -->
+<div class="login-shell" id="loginShell">
+  <div class="login-card">
+    <div class="login-body">
+      <label for="loginPassword">ADMIN PASSKEY</label>
+      <input type="password" id="loginPassword" placeholder="Enter admin key" autocomplete="current-password">
+      <button type="button" onclick="doLogin()">SIGN IN</button>
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard (hidden until authenticated) -->
+<div class="admin-shell" id="dashboardShell" style="display:none;">
+  <aside class="side">
+    <a href="#" class="active">Shipments</a>
+     <a href="/" style="margin-top:20px;border-top:1px solid var(--manifest-line);padding-top:18px;">← Back to site</a>
+    <a href="#" onclick="doLogout();return false;">Sign out</a>
+  </aside>
+
+  <main class="main">
+    <div class="main-head">
+      <div class="head-copy">
+        <div class="dashboard-kicker">OPERATIONS CONTROL TOWER</div>
+        <h1>Shipment ledger</h1>
+        <p>Keep every handoff current, searchable, and ready to share.</p>
+      </div>
+      <div class="dashboard-actions">
+        <span class="system-status" id="systemStatus">Checking API</span>
+        <button class="btn" type="button" onclick="openComposer()">+ New shipment</button>
+      </div>
+    </div>
+
+    <section class="composer" id="composer" hidden>
+      <div class="composer-head">
+        <div><h2 id="composerTitle">Create shipment</h2><p>Start a clear record that customers and operators can trust.</p></div>
+        <button class="composer-close" type="button" onclick="closeComposer()" aria-label="Close shipment form">×</button>
+      </div>
+      <form id="shipmentForm" onsubmit="saveShipment(event)">
+        <input type="hidden" id="editingShipmentId">
+        <div class="form-grid">
+          <div class="form-field"><label for="shipmentId">SHIPMENT ID *</label><input id="shipmentId" required maxlength="64" placeholder="LS-48213-XA"></div>
+          <div class="form-field"><label for="shipmentStatus">CURRENT STAGE *</label><select id="shipmentStatus" required></select></div>
+          <div class="form-field"><label for="shipmentSender">SENDER *</label><input id="shipmentSender" required placeholder="Sender or company"></div>
+          <div class="form-field"><label for="shipmentReceiver">RECEIVER *</label><input id="shipmentReceiver" required placeholder="Receiver or company"></div>
+          <div class="form-field"><label for="shipmentLocation">CURRENT LOCATION *</label><input id="shipmentLocation" required placeholder="Hub, port, or city"></div>
+          <div class="form-field"><label for="shipmentWeight">WEIGHT (KG) *</label><input id="shipmentWeight" required type="number" min="0" step="0.01" placeholder="0"></div>
+          <div class="form-field"><label for="shipmentEta">ESTIMATED ARRIVAL</label><input id="shipmentEta" placeholder="e.g. 18 Aug 2026"></div>
+          <div class="form-field"><label for="shipmentImage">CARGO IMAGE URL</label><input id="shipmentImage" type="url" placeholder="https://..."></div>
+          <div class="form-field full"><label for="shipmentNotes">OPERATIONAL NOTE</label><textarea id="shipmentNotes" placeholder="Add the latest customer-safe context."></textarea></div>
+        </div>
+        <div class="composer-actions"><button class="btn btn-outline" type="button" onclick="closeComposer()">Cancel</button><button class="btn" id="saveShipmentButton" type="submit">Create shipment</button></div>
+        <div class="notice" id="composerNotice" role="status"></div>
+      </form>
+    </section>
+
+    <div class="kpis" id="kpis">
+      <div class="kpi"><div class="n">—</div><div class="l">Total shipments on file</div><div class="meta">ALL RECORDS</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">In transit</div><div class="meta">MOVING NOW</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">Delivered</div><div class="meta">CLOSED RECORDS</div></div>
+      <div class="kpi"><div class="n">—</div><div class="l">Total weight (kg)</div><div class="meta">NETWORK LOAD</div></div>
+    </div>
+
+    <div class="table-heading"><div><h2>All shipments</h2><p>Filter the live registry or export the current view.</p></div><div class="toolbar"><input type="text" id="searchInput" placeholder="Search ID or name" aria-label="Search shipments"><select class="status-filter" id="statusFilter" aria-label="Filter by stage"><option value="ALL">All stages</option></select><button class="btn" type="button" onclick="loadShipments()">Refresh</button><button class="btn btn-outline" type="button" onclick="exportCSV()">Export CSV</button></div></div>
+    <div class="table-scroll">
+    <table id="ledger">
+      <thead>
+        <tr>
+          <th>Shipment ID</th>
+          <th>Sender → Receiver</th>
+          <th>Location</th>
+          <th>Stage</th>
+          <th>Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="ledgerBody">
+        <tr><td colspan="6" style="text-align:center;color:var(--steel-soft);padding:30px;">Loading…</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </main>
+</div>
+
+<script>
+const API_BASE = window.CONSIGNMENT_CONFIG.apiBase;
+let currentRows = [];
+
+const STAGES = [
+  ['Manifest Created', 'Manifest created'],
+  ['Sorting Hub Allocation', 'Sorting hub allocation'],
+  ['Customs Clearing Arrays', 'Customs clearing'],
+  ['In Transit', 'In transit'],
+  ['Port of Discharge Checkpoint', 'Port of discharge'],
+  ['Out for Delivery', 'Out for delivery'],
+  ['Delivered', 'Delivered']
+];
+const STAGE_CLASS = {
+  'Delivered': 'delivered',
+  'In Transit': 'transit',
+  'Out for Delivery': 'transit',
+};
+function stageClass(status){ return STAGE_CLASS[status] || 'pending'; }
+function escapeHTML(value){
+  return String(value ?? '').replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+}
+function getField(id){ return document.getElementById(id).value.trim(); }
+function setField(id, value){ document.getElementById(id).value = value || ''; }
+function setNotice(message, type = ''){
+  const notice = document.getElementById('composerNotice');
+  notice.textContent = message;
+  notice.className = `notice ${type}`.trim();
+}
+function populateStageOptions(){
+  document.getElementById('shipmentStatus').innerHTML = STAGES.map(([value, label]) => `<option value="${value}">${label}</option>`).join('');
+  document.getElementById('statusFilter').innerHTML = '<option value="ALL">All stages</option>' + STAGES.map(([value, label]) => `<option value="${value}">${label}</option>`).join('');
+}
+
+function getToken(){ return sessionStorage.getItem('admin_token'); }
+function setToken(t){ sessionStorage.setItem('admin_token', t); }
+function clearToken(){ sessionStorage.removeItem('admin_token'); }
+
+function showDashboard(){
+  document.getElementById('loginShell').style.display = 'none';
+  document.getElementById('dashboardShell').style.display = 'grid';
+  document.getElementById('operatorTag').textContent = 'SESSION ACTIVE';
+  loadShipments();
+  loadStats();
+  loadHealth();
+}
+function showLogin(){
+  document.getElementById('loginShell').style.display = 'block';
+  document.getElementById('dashboardShell').style.display = 'none';
+  document.getElementById('operatorTag').textContent = '';
+}
+
+async function doLogin(){
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  errEl.textContent = '';
+  try {
+    const r = await fetch(`${API_BASE}/admin/verify`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ password })
+    });
+    const data = await r.json();
+    if (data.success) {
+      setToken(data.token);
+      showDashboard();
+    } else {
+      errEl.textContent = data.message || 'Invalid passkey.';
+    }
+  } catch (e) {
+    errEl.textContent = 'Could not reach the server. Try again.';
+  }
+}
+
+async function doLogout(){
+  const token = getToken();
+  if (token) fetch(`${API_BASE}/admin/logout`, { method:'POST', headers:{'x-admin-token':token} }).catch(()=>{});
+  clearToken();
+  showLogin();
+}
+
+async function loadStats(){
+  try {
+    const r = await fetch(`${API_BASE}/stats`);
+    if (!r.ok) return;
+    const s = await r.json();
+    const kpis = document.getElementById('kpis');
+    kpis.innerHTML = `
+      <div class="kpi"><div class="n">${s.total}</div><div class="l">Total shipments on file</div><div class="meta">ALL RECORDS</div></div>
+      <div class="kpi"><div class="n">${s.inTransit}</div><div class="l">In transit</div><div class="meta">MOVING NOW</div></div>
+      <div class="kpi"><div class="n">${s.delivered}</div><div class="l">Delivered</div><div class="meta">CLOSED RECORDS</div></div>
+      <div class="kpi"><div class="n">${Number(s.totalWeightKg || 0).toLocaleString()}</div><div class="l">Total weight (kg)</div><div class="meta">NETWORK LOAD</div></div>
+    `;
+  } catch(e) { /* stats are non-critical */ }
+}
+
+async function loadHealth(){
+  const status = document.getElementById('systemStatus');
+  try {
+    const r = await fetch(`${API_BASE}/health`);
+    const data = await r.json();
+    status.textContent = data.status === 'online' ? 'API online' : 'API degraded';
+    status.className = `system-status ${data.status === 'online' ? 'online' : ''}`.trim();
+  } catch(e) {
+    status.textContent = 'API unavailable';
+    status.className = 'system-status';
+  }
+}
+
+async function loadShipments(){
+  const body = document.getElementById('ledgerBody');
+  const token = getToken();
+  const search = getField('searchInput');
+  const status = document.getElementById('statusFilter').value;
+  body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--steel-soft);padding:30px;">Loading…</td></tr>';
+  try {
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (status !== 'ALL') params.set('status', status);
+    let url = `${API_BASE}/shipments${params.toString() ? `?${params}` : ''}`;
+    const r = await fetch(url, { headers: token ? {'x-admin-token': token} : {} });
+    if (r.status === 401) { clearToken(); showLogin(); return; }
+    if (!r.ok) throw new Error('failed');
+    currentRows = await r.json();
+    renderRows();
+  } catch(e) {
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--steel-soft);padding:30px;">Could not load shipments.</td></tr>';
+  }
+}
+
+function renderRows(){
+  const body = document.getElementById('ledgerBody');
+  if (!currentRows.length) {
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--steel-soft);padding:30px;">No shipments on file yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = currentRows.map(r => `
+    <tr>
+      <td class="id-cell">${escapeHTML(r.shipmentId)}</td>
+      <td>${escapeHTML(r.sender || '—')} → ${escapeHTML(r.receiver || '—')}</td>
+      <td>${escapeHTML(r.location || '—')}</td>
+      <td><span class="pill ${stageClass(r.status)}">${escapeHTML((r.status || '').toUpperCase())}</span></td>
+      <td>${r.updated_at || r.created_at ? new Date(r.updated_at || r.created_at).toLocaleDateString('en-US',{month:'short',day:'2-digit'}) : '—'}</td>
+      <td class="row-actions"><button class="row-action" type="button" data-action="edit" data-id="${escapeHTML(r.shipmentId)}">Edit</button><button class="row-action delete" type="button" data-action="delete" data-id="${escapeHTML(r.shipmentId)}">Delete</button></td>
+    </tr>
+  `).join('');
+  body.querySelectorAll('[data-action="edit"]').forEach(button => button.addEventListener('click', () => editShipment(button.dataset.id)));
+  body.querySelectorAll('[data-action="delete"]').forEach(button => button.addEventListener('click', () => deleteShipment(button.dataset.id)));
+}
+
+function openComposer(shipment = null){
+  const composer = document.getElementById('composer');
+  composer.hidden = false;
+  document.getElementById('composerTitle').textContent = shipment ? 'Edit shipment' : 'Create shipment';
+  document.getElementById('saveShipmentButton').textContent = shipment ? 'Save changes' : 'Create shipment';
+  document.getElementById('shipmentId').disabled = Boolean(shipment);
+  document.getElementById('editingShipmentId').value = shipment ? shipment.shipmentId : '';
+  setField('shipmentId', shipment?.shipmentId);
+  setField('shipmentStatus', shipment?.status || 'Manifest Created');
+  setField('shipmentSender', shipment?.sender);
+  setField('shipmentReceiver', shipment?.receiver);
+  setField('shipmentLocation', shipment?.location);
+  setField('shipmentWeight', shipment?.weight);
+  setField('shipmentEta', shipment?.eta);
+  setField('shipmentImage', shipment?.imageUrl);
+  setField('shipmentNotes', shipment?.notes);
+  setNotice('');
+  composer.scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('shipmentSender').focus();
+}
+
+function closeComposer(){
+  document.getElementById('composer').hidden = true;
+  document.getElementById('shipmentForm').reset();
+  document.getElementById('shipmentId').disabled = false;
+  document.getElementById('editingShipmentId').value = '';
+  document.getElementById('composerTitle').textContent = 'Create shipment';
+  document.getElementById('saveShipmentButton').textContent = 'Create shipment';
+  setNotice('');
+}
+
+function editShipment(id){
+  const shipment = currentRows.find(row => String(row.shipmentId) === String(id));
+  if (shipment) openComposer(shipment);
+}
+
+async function saveShipment(event){
+  event.preventDefault();
+  const token = getToken();
+  const editingId = getField('editingShipmentId');
+  const payload = {
+    shipmentId: getField('shipmentId'),
+    sender: getField('shipmentSender'),
+    receiver: getField('shipmentReceiver'),
+    location: getField('shipmentLocation'),
+    weight: getField('shipmentWeight'),
+    status: getField('shipmentStatus'),
+    eta: getField('shipmentEta'),
+    imageUrl: getField('shipmentImage'),
+    notes: getField('shipmentNotes')
+  };
+  const button = document.getElementById('saveShipmentButton');
+  button.disabled = true;
+  setNotice(editingId ? 'Saving changes…' : 'Creating shipment…');
+  try {
+    const r = await fetch(`${API_BASE}/shipments${editingId ? `/${encodeURIComponent(editingId)}` : ''}`, {
+      method: editingId ? 'PUT' : 'POST',
+      headers: {'Content-Type':'application/json','x-admin-token':token},
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json().catch(() => ({}));
+    if (r.status === 401) { clearToken(); showLogin(); return; }
+    if (!r.ok) throw new Error(data.message || 'Could not save shipment.');
+    closeComposer();
+    await Promise.all([loadShipments(), loadStats()]);
+  } catch(e) {
+    setNotice(e.message || 'Could not save shipment.', 'error');
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function deleteShipment(id){
+  if (!window.confirm(`Delete shipment ${id}? This cannot be undone.`)) return;
+  try {
+    const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(id)}`, {method:'DELETE', headers:{'x-admin-token':getToken()}});
+    const data = await r.json().catch(() => ({}));
+    if (r.status === 401) { clearToken(); showLogin(); return; }
+    if (!r.ok) throw new Error(data.message || 'Could not delete shipment.');
+    await Promise.all([loadShipments(), loadStats()]);
+  } catch(e) {
+    window.alert(e.message || 'Could not delete shipment.');
+  }
+}
+
+function exportCSV(){
+  if (!currentRows.length) return;
+  const header = "Shipment ID,Sender,Receiver,Location,Status,Weight,Created\n";
+  const csvValue = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+  const csv = header + currentRows.map(r => [r.shipmentId,r.sender,r.receiver,r.location,r.status,r.weight,r.created_at || ''].map(csvValue).join(',')).join("\n");
+  const blob = new Blob([csv], {type:"text/csv"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = "shipments.csv"; a.click();
+}
+
+document.getElementById('loginPassword').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') loadShipments(); });
+document.getElementById('statusFilter').addEventListener('change', loadShipments);
+
+// On load: try existing session
+(function init(){
+  populateStageOptions();
+  if (getToken()) { showDashboard(); } else { showLogin(); }
+})();
+</script>
+</body>
+</html>
