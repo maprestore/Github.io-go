@@ -51,6 +51,10 @@
   .record-meta div:first-child{border-left:none;}
   .record-meta label{display:block;font-size:11.5px;color:var(--steel-soft);font-family:'IBM Plex Mono',monospace;margin-bottom:6px;}
   .record-meta span{font-size:14.5px;color:var(--ink);}
+  .record-visual{margin:0;border-bottom:1px solid var(--manifest-line);background:#eaf0f3;}
+  .record-visual img{display:block;width:100%;height:260px;object-fit:cover;}
+  .record-visual figcaption{padding:10px 18px;color:var(--steel-soft);font:10px 'IBM Plex Mono',monospace;letter-spacing:.8px;text-transform:uppercase;}
+  .record-visual .image-unavailable{display:none;}
 
   .timeline{padding:26px;}
   .t-item{
@@ -77,8 +81,11 @@
     .track-search{flex-direction:column;padding:10px;margin-bottom:26px;}
     .track-search input{min-height:46px;padding:10px 8px;}
     .track-search button{width:100%;}
-    .record-head{padding:18px;}
+    .record-head{display:grid;grid-template-columns:1fr;padding:18px;}
     .record-head h1{font-size:23px;}
+    .record-head>div{min-width:0;}
+    .status-pill{justify-self:start;}
+    .record-visual img{height:190px;}
     .record-meta{grid-template-columns:1fr;}
     .record-meta div{padding:14px 18px;border-left:0;border-bottom:1px solid var(--manifest-line);}
     .record-meta div:last-child{border-bottom:0;}
@@ -150,6 +157,15 @@ const STAGE_LABELS = {
   'Delivered': 'Delivered'
 };
 
+function escapeHTML(value){
+  return String(value ?? '').replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+}
+
+function getImageUrl(shipment){
+  const value = typeof shipment?.imageUrl === 'string' ? shipment.imageUrl.trim() : '';
+  return /^https?:\/\//i.test(value) ? value : '';
+}
+
 function fmtDate(iso){
   if(!iso) return 'Pending';
   const d = new Date(iso);
@@ -183,7 +199,7 @@ async function lookupShipment(){
   try {
     const r = await fetch(`${API_BASE}/shipments/${encodeURIComponent(raw)}`);
     if (r.status === 404) {
-      result.innerHTML = `<div class="error-box"><strong>No record found</strong>No shipment matches "${raw.toUpperCase()}". Double-check the ID and try again.</div>`;
+      result.innerHTML = `<div class="error-box"><strong>No record found</strong>No shipment matches "${escapeHTML(raw.toUpperCase())}". Double-check the ID and try again.</div>`;
       return;
     }
     if (!r.ok) throw new Error('Lookup failed');
@@ -198,34 +214,48 @@ function renderRecord(shipment){
   const result = document.getElementById('result');
   const stages = buildTimeline(shipment);
   const currentIdx = STAGES.indexOf(shipment.status);
+  const imageUrl = getImageUrl(shipment);
+  const imageBlock = imageUrl ? `
+    <figure class="record-visual">
+      <img src="${escapeHTML(imageUrl)}" alt="Cargo image for ${escapeHTML(shipment.shipmentId)}" loading="lazy">
+      <figcaption>Shipment documentation / cargo image</figcaption>
+    </figure>` : '';
   result.innerHTML = `
     <div class="record">
       <div class="record-head">
         <div>
-          <div class="id mono">${shipment.shipmentId}</div>
-          <h1>${STAGE_LABELS[shipment.status] || shipment.status}</h1>
+          <div class="id mono">${escapeHTML(shipment.shipmentId)}</div>
+          <h1>${escapeHTML(STAGE_LABELS[shipment.status] || shipment.status || 'Shipment status unavailable')}</h1>
         </div>
         <span class="status-pill">STAGE ${currentIdx + 1} OF ${STAGES.length}</span>
       </div>
       <div class="record-meta">
-        <div><label>SENDER</label><span>${shipment.sender || '—'}</span></div>
-        <div><label>RECEIVER</label><span>${shipment.receiver || '—'}</span></div>
-        <div><label>EST. ARRIVAL</label><span>${shipment.eta || 'Not set'}</span></div>
+        <div><label>SENDER</label><span>${escapeHTML(shipment.sender || '—')}</span></div>
+        <div><label>RECEIVER</label><span>${escapeHTML(shipment.receiver || '—')}</span></div>
+        <div><label>EST. ARRIVAL</label><span>${escapeHTML(shipment.eta || 'Not set')}</span></div>
       </div>
+      ${imageBlock}
       <div class="timeline">
         ${stages.map(s => `
           <div class="t-item ${s.done ? 'done':''}">
-            <div class="when">${s.when}</div>
+            <div class="when">${escapeHTML(s.when)}</div>
             <div class="rail"><div class="dot"></div><div class="line"></div></div>
             <div class="body">
-              <h4>${s.name}</h4>
-              <p>${s.note}</p>
+              <h4>${escapeHTML(s.name)}</h4>
+              <p>${escapeHTML(s.note)}</p>
             </div>
           </div>
         `).join('')}
       </div>
     </div>
   `;
+  const image = result.querySelector('.record-visual img');
+  image?.addEventListener('error', () => {
+    image.removeAttribute('src');
+    image.classList.add('image-unavailable');
+    const caption = result.querySelector('.record-visual figcaption');
+    if (caption) caption.textContent = 'Cargo image unavailable';
+  });
 }
 
 // Pre-fill from homepage search (?id=...) if present
