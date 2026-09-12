@@ -13,12 +13,16 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
-    <nav class="nav">
+    <nav class="nav" id="site-nav" aria-label="Primary navigation">
       <a href="#pipeline">Shipment stages</a>
       <a href="about.html">About</a>
       <a href="tracking.html">Track a shipment</a>
+      <a href="admin.html" class="mobile-operator-link">Operator sign in</a>
     </nav>
-    <a href="admin.html" class="btn btn-outline">Operator sign in</a>
+    <a href="admin.html" class="btn btn-outline header-action">Operator sign in</a>
+    <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+    </button>
   </div>
 </div>
 
@@ -37,12 +41,12 @@
     <div class="manifest-card">
       <div class="manifest-body">
         <div class="field-row">
-          <label>SHIPMENT ID</label>
-          <input type="text" id="heroShipmentId" placeholder="e.g. CN-48213-XA" />
+          <label for="heroShipmentId">SHIPMENT ID</label>
+          <input type="text" id="heroShipmentId" placeholder="e.g. CN-48213-XA" autocomplete="off" />
         </div>
         <div class="field-row">
-          <label>CONSIGNEE NAME (OPTIONAL)</label>
-          <input type="text" id="heroConsignee" placeholder="Full name on shipment" />
+          <label for="heroConsignee">CONSIGNEE NAME (OPTIONAL)</label>
+          <input type="text" id="heroConsignee" placeholder="Full name on shipment" autocomplete="name" />
         </div>
         <button class="manifest-submit" onclick="goToTracking()">LOCATE SHIPMENT</button>
         <div class="manifest-foot">
@@ -70,7 +74,7 @@
       <h2>Seven checkpoints, one continuous record</h2>
       <p>Every consignment moves through the same fixed sequence. Nothing skips a step, and nothing gets updated twice.</p>
     </div>
-    <div class="stages" style="grid-template-columns:repeat(4,1fr);">
+    <div class="stages">
       <div class="stage"><div class="idx">01</div><h3>Manifest created</h3><p>Shipment logged with sender, receiver, and weight on file.</p></div>
       <div class="stage"><div class="idx">02</div><h3>Sorting hub allocation</h3><p>Assigned to a hub for consolidation and onward routing.</p></div>
       <div class="stage"><div class="idx">03</div><h3>Customs clearing</h3><p>Documentation reviewed and cleared for border crossing.</p></div>
@@ -137,5 +141,6 @@ function goToTracking(){
 }
 document.getElementById('heroShipmentId').addEventListener('keydown', e => { if(e.key === 'Enter') goToTracking(); });
 </script>
+<script src="site.js"></script>
 </body>
 </html>

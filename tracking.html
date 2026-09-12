@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="style.css">
 <script src="assets/config.js"></script>
 <style>
-  .track-wrap{max-width:760px;margin:0 auto;padding:56px 28px 90px;}
+  .track-wrap{max-width:820px;margin:0 auto;padding:clamp(34px,6vw,64px) 28px 90px;}
   .loading{padding:40px;text-align:center;color:var(--steel-soft);font-family:'IBM Plex Mono',monospace;font-size:13px;}
   .error-box{padding:30px 26px;border:1px solid var(--manifest-line);background:var(--white);color:var(--steel);}
   .error-box strong{color:var(--ink);display:block;margin-bottom:6px;font-family:'Oswald',sans-serif;font-size:17px;}
@@ -24,7 +24,7 @@
   .track-search input:focus{outline:none;}
   .track-search button{
     background:var(--orange);color:var(--white);border:none;
-    padding:0 22px;font-weight:600;font-size:14px;cursor:pointer;
+    min-height:44px;padding:0 22px;font-weight:600;font-size:14px;cursor:pointer;
   }
   .record{
     border:1px solid var(--manifest-line);background:var(--white);
@@ -71,6 +71,22 @@
     text-align:center;padding:60px 20px;color:var(--steel-soft);
     border:1px dashed var(--manifest-line);
   }
+  @media (max-width:600px){
+    .track-wrap{padding-left:18px;padding-right:18px;}
+    .track-search{flex-direction:column;padding:10px;margin-bottom:26px;}
+    .track-search input{min-height:46px;padding:10px 8px;}
+    .track-search button{width:100%;}
+    .record-head{padding:18px;}
+    .record-head h1{font-size:23px;}
+    .record-meta{grid-template-columns:1fr;}
+    .record-meta div{padding:14px 18px;border-left:0;border-bottom:1px solid var(--manifest-line);}
+    .record-meta div:last-child{border-bottom:0;}
+    .timeline{padding:22px 16px;}
+    .t-item{grid-template-columns:76px 18px minmax(0,1fr);}
+    .t-item .body{padding-bottom:24px;}
+    .t-item h4{font-size:14px;}
+    .t-item p{font-size:12.5px;}
+  }
 </style>
 </head>
 <body>
@@ -78,20 +94,24 @@
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="mark"></span>CONSIGNMENT&nbsp;OPS</div>
-    <nav class="nav">
+    <nav class="nav" id="site-nav" aria-label="Primary navigation">
       <a href="index.html#pipeline">Shipment stages</a>
       <a href="about.html">About</a>
       <a href="tracking.html">Track a shipment</a>
+      <a href="admin.html" class="mobile-operator-link">Operator sign in</a>
     </nav>
-    <a href="admin.html" class="btn btn-outline">Operator sign in</a>
+    <a href="admin.html" class="btn btn-outline header-action">Operator sign in</a>
+    <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open navigation">
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+    </button>
   </div>
 </div>
 
 <div class="track-wrap">
 
   <div class="track-search">
-    <input type="text" id="trackInput" placeholder="Enter shipment ID, e.g. CN-48213-XA">
-    <button onclick="lookupShipment()">LOCATE</button>
+    <input type="text" id="trackInput" placeholder="Enter shipment ID, e.g. CN-48213-XA" aria-label="Shipment ID" autocomplete="off">
+    <button type="button" onclick="lookupShipment()">LOCATE</button>
   </div>
 
   <div id="result"><div class="empty">Enter a shipment ID above to see its record.</div></div>
@@ -216,5 +236,6 @@ function renderRecord(shipment){
   }
 })();
 </script>
+<script src="site.js"></script>
 </body>
 </html>
